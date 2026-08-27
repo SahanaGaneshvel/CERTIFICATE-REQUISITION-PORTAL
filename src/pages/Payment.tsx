@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CreditCard, Building2, Smartphone, Shield, Lock } from 'lucide-react';
 import { Card, Button, Input, RadioGroup } from '../components/ui';
+import { api } from '../lib/api';
 import styles from './Payment.module.css';
 
 const paymentMethods = [
@@ -10,10 +11,19 @@ const paymentMethods = [
   { value: 'upi', label: 'UPI', description: 'Google Pay, PhonePe, Paytm' },
 ];
 
+interface LocationState {
+  entity?: 'transcript' | 'certificate';
+  entityId?: string;
+  amount?: number;
+  type?: string;
+  description?: string;
+}
+
 export function Payment() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { amount = 500, type = 'Transcript Fee', description = '1 set of Transcript' } = location.state || {};
+  const { entity, entityId, amount = 500, type = 'Transcript Fee', description = '1 set of Transcript' } =
+    (location.state as LocationState) || {};
 
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [cardDetails, setCardDetails] = useState({
@@ -25,36 +35,43 @@ export function Payment() {
   const [upiId, setUpiId] = useState('');
   const [selectedBank, setSelectedBank] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (!entity || !entityId) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [entity, entityId, navigate]);
 
   const convenienceFee = Math.round(amount * 0.02);
   const totalAmount = amount + convenienceFee;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!entity || !entityId) return;
+    setError('');
     setIsProcessing(true);
 
-    // Simulate payment processing
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      const { payment } = await api.post<{ payment: { srmTransId: string } }>('/payments/initiate', {
+        entity,
+        entityId,
+      });
 
-    // Randomly succeed or fail for demo
-    const success = Math.random() > 0.2;
+      // In production the browser would redirect to the real payment gateway here,
+      // which calls POST /api/payments/callback server-to-server on completion.
+      // No gateway is integrated yet, so /payments/mock-complete (disabled by the
+      // backend once NODE_ENV=production) stands in for that redirect for now.
+      await api.post('/payments/mock-complete', { srmTransId: payment.srmTransId, succeed: true }).catch(() => {
+        // In a real deployment this route won't exist once a gateway is wired up; ignore.
+      });
 
-    if (success) {
       navigate('/payment-success', {
-        state: {
-          transactionId: `TXN${Date.now()}`,
-          amount: totalAmount,
-          type,
-        },
+        state: { srmTransId: payment.srmTransId, amount: totalAmount, type },
       });
-    } else {
-      navigate('/payment-failed', {
-        state: {
-          amount: totalAmount,
-          type,
-          error: 'Payment declined by bank',
-        },
-      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to initiate payment');
+      setIsProcessing(false);
     }
   };
 
@@ -112,6 +129,8 @@ export function Payment() {
         {/* Payment Form */}
         <Card variant="elevated" padding="lg" className={styles.paymentCard}>
           <h2 className={styles.paymentTitle}>Payment Details</h2>
+
+          {error && <p className={styles.disclaimer} style={{ color: '#dc2626' }}>{error}</p>}
 
           <form onSubmit={handleSubmit}>
             <RadioGroup

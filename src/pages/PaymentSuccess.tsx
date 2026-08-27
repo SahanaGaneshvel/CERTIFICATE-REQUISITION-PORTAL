@@ -1,19 +1,81 @@
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle, Download, Home, Printer } from 'lucide-react';
 import { Card, Button } from '../components/ui';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../lib/api';
 import styles from './PaymentResult.module.css';
+
+interface LocationState {
+  srmTransId?: string;
+  amount?: number;
+  type?: string;
+}
+
+interface PaymentRecord {
+  status: 'PENDING' | 'SUCCESS' | 'FAILED';
+  pgTransId: string | null;
+  amount: number;
+  feeType: string;
+  dateTime: string;
+}
 
 export function PaymentSuccess() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { transactionId, amount, type } = location.state || {};
+  const { srmTransId, amount, type } = (location.state as LocationState) || {};
+  const [payment, setPayment] = useState<PaymentRecord | null>(null);
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    if (!srmTransId) {
+      setChecking(false);
+      return;
+    }
+    let cancelled = false;
+    let attempts = 0;
+
+    async function poll() {
+      try {
+        const res = await api.get<{ payment: PaymentRecord }>(`/payments/status/${srmTransId}`);
+        if (cancelled) return;
+        if (res.payment.status === 'FAILED') {
+          navigate('/payment-failed', { state: { srmTransId, amount, type } });
+          return;
+        }
+        if (res.payment.status === 'SUCCESS' || attempts >= 10) {
+          setPayment(res.payment);
+          setChecking(false);
+          return;
+        }
+        attempts += 1;
+        setTimeout(poll, 2000);
+      } catch {
+        if (!cancelled) setChecking(false);
+      }
+    }
+    poll();
+    return () => {
+      cancelled = true;
+    };
+  }, [srmTransId, amount, type, navigate]);
 
   const currentDate = new Date().toLocaleString('en-IN', {
     dateStyle: 'medium',
     timeStyle: 'short',
   });
+
+  if (checking) {
+    return (
+      <div className={styles.container}>
+        <Card variant="elevated" padding="lg" className={styles.resultCard}>
+          <h1 className={styles.title}>Verifying payment...</h1>
+          <p className={styles.subtitle}>Please wait while we confirm your payment status.</p>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
@@ -66,13 +128,13 @@ export function PaymentSuccess() {
               </thead>
               <tbody>
                 <tr>
-                  <td>{transactionId || 'TXN123456789'}</td>
+                  <td>{payment?.pgTransId || srmTransId || 'TXN123456789'}</td>
                   <td>{currentDate}</td>
                   <td>
                     <span className={styles.statusSuccess}>Payment Success</span>
                   </td>
-                  <td>{type || 'Transcript Fee In Person'}</td>
-                  <td>&#8377; {amount?.toFixed(2) || '500.00'}</td>
+                  <td>{type || payment?.feeType || 'Transcript Fee In Person'}</td>
+                  <td>&#8377; {(payment?.amount ?? amount)?.toFixed(2) || '500.00'}</td>
                 </tr>
               </tbody>
               <tfoot>
@@ -81,7 +143,7 @@ export function PaymentSuccess() {
                     <strong>Total Fees</strong>
                   </td>
                   <td>
-                    <strong>&#8377; {amount?.toFixed(2) || '500.00'}</strong>
+                    <strong>&#8377; {(payment?.amount ?? amount)?.toFixed(2) || '500.00'}</strong>
                   </td>
                 </tr>
               </tfoot>

@@ -1,101 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CheckCircle, XCircle, Clock } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent, Button, Badge, Select } from '../components/ui';
+import { Card, CardHeader, CardTitle, CardContent, Badge, Select } from '../components/ui';
+import { useAuth } from '../context/AuthContext';
+import { api } from '../lib/api';
 import styles from './PaymentHistory.module.css';
+
+interface PaymentRecord {
+  id: string;
+  srmTransId: string;
+  pgTransId: string | null;
+  amount: number;
+  status: 'SUCCESS' | 'FAILED' | 'PENDING';
+}
 
 interface Transaction {
   id: string;
   sNo: number;
-  verify: boolean;
   studentId: string;
   srmTransId: string;
   bankTransId: string;
   totalAmount: number;
   paymentStatus: 'success' | 'failed' | 'pending';
 }
-
-const transactions: Transaction[] = [
-  {
-    id: '1',
-    sNo: 1,
-    verify: false,
-    studentId: 'RA2311003010079',
-    srmTransId: 'SRM202408250001',
-    bankTransId: 'PAY123456789',
-    totalAmount: 600,
-    paymentStatus: 'success',
-  },
-  {
-    id: '2',
-    sNo: 2,
-    verify: false,
-    studentId: 'RA2311003010079',
-    srmTransId: 'SRM202408200002',
-    bankTransId: 'PAY987654321',
-    totalAmount: 200,
-    paymentStatus: 'success',
-  },
-  {
-    id: '3',
-    sNo: 3,
-    verify: false,
-    studentId: 'RA2311003010079',
-    srmTransId: 'SRM202408150003',
-    bankTransId: 'PAY456789123',
-    totalAmount: 300,
-    paymentStatus: 'success',
-  },
-  {
-    id: '4',
-    sNo: 4,
-    verify: false,
-    studentId: 'RA2311003010079',
-    srmTransId: 'SRM202408100004',
-    bankTransId: 'PAY789123456',
-    totalAmount: 400,
-    paymentStatus: 'success',
-  },
-  {
-    id: '5',
-    sNo: 5,
-    verify: false,
-    studentId: 'RA2311003010079',
-    srmTransId: 'SRM202408050005',
-    bankTransId: '-',
-    totalAmount: 200,
-    paymentStatus: 'failed',
-  },
-  {
-    id: '6',
-    sNo: 6,
-    verify: true,
-    studentId: 'RA2311003010079',
-    srmTransId: 'SRM202407250006',
-    bankTransId: '-',
-    totalAmount: 250,
-    paymentStatus: 'pending',
-  },
-  {
-    id: '7',
-    sNo: 7,
-    verify: true,
-    studentId: 'RA2311003010079',
-    srmTransId: 'SRM202407200007',
-    bankTransId: '-',
-    totalAmount: 550,
-    paymentStatus: 'pending',
-  },
-  {
-    id: '8',
-    sNo: 8,
-    verify: true,
-    studentId: 'RA2311003010079',
-    srmTransId: 'SRM202407150008',
-    bankTransId: '-',
-    totalAmount: 250,
-    paymentStatus: 'pending',
-  },
-];
 
 const filterOptions = [
   { value: 'all', label: 'All Transactions' },
@@ -105,7 +31,29 @@ const filterOptions = [
 ];
 
 export function PaymentHistory() {
+  const { user } = useAuth();
   const [filter, setFilter] = useState('all');
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    api
+      .get<{ payments: PaymentRecord[] }>('/payments/history')
+      .then((res) => {
+        setTransactions(
+          res.payments.map((p, index) => ({
+            id: p.id,
+            sNo: index + 1,
+            studentId: user?.registerNo ?? '',
+            srmTransId: p.srmTransId,
+            bankTransId: p.pgTransId ?? '-',
+            totalAmount: p.amount,
+            paymentStatus: p.status.toLowerCase() as 'success' | 'failed' | 'pending',
+          }))
+        );
+      })
+      .finally(() => setIsLoading(false));
+  }, [user?.registerNo]);
 
   const filteredTransactions = transactions.filter((t) => {
     if (filter === 'all') return true;
@@ -199,7 +147,6 @@ export function PaymentHistory() {
               <thead>
                 <tr>
                   <th>S.No</th>
-                  <th>Verify</th>
                   <th>Student Id</th>
                   <th>SRM Transaction Id</th>
                   <th>Bank Transaction Id</th>
@@ -208,18 +155,19 @@ export function PaymentHistory() {
                 </tr>
               </thead>
               <tbody>
+                {isLoading && (
+                  <tr>
+                    <td colSpan={5}>Loading...</td>
+                  </tr>
+                )}
+                {!isLoading && filteredTransactions.length === 0 && (
+                  <tr>
+                    <td colSpan={5}>No transactions yet</td>
+                  </tr>
+                )}
                 {filteredTransactions.map((transaction) => (
                   <tr key={transaction.id}>
                     <td>{transaction.sNo}</td>
-                    <td>
-                      {transaction.verify ? (
-                        <Button variant="secondary" size="sm">
-                          Verify
-                        </Button>
-                      ) : (
-                        '-'
-                      )}
-                    </td>
                     <td className={styles.studentId}>{transaction.studentId}</td>
                     <td className={styles.transId}>{transaction.srmTransId}</td>
                     <td className={styles.transId}>{transaction.bankTransId}</td>

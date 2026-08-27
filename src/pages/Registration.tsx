@@ -57,12 +57,12 @@ export function Registration() {
     setIsLoading(true);
     setShowConfirmModal(false);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    completeRegistration(formData);
-    setIsLoading(false);
-    navigate('/dashboard');
+    try {
+      await completeRegistration(formData);
+      navigate('/dashboard');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {

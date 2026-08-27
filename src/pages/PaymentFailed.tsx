@@ -8,7 +8,7 @@ export function PaymentFailed() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { amount, type, error } = location.state || {};
+  const { amount, type, error, srmTransId } = (location.state as { amount?: number; type?: string; error?: string; srmTransId?: string }) || {};
 
   const currentDate = new Date().toLocaleString('en-IN', {
     dateStyle: 'medium',
@@ -72,7 +72,7 @@ export function PaymentFailed() {
               </thead>
               <tbody>
                 <tr>
-                  <td>-</td>
+                  <td>{srmTransId || '-'}</td>
                   <td>{currentDate}</td>
                   <td>
                     <span className={styles.statusFailed}>Payment Failed</span>

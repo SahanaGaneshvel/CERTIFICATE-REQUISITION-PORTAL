@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FileText, Download, Eye, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../lib/api';
 import { Card, CardHeader, CardTitle, CardContent, Button, Select, Badge } from '../components/ui';
 import styles from './CourseCompletion.module.css';
 
@@ -21,27 +22,32 @@ const purposes = [
   { value: 'other', label: 'Other' },
 ];
 
-interface Certificate {
+interface CertificateRequestRecord {
   id: string;
-  name: string;
-  status: 'generated' | 'not-generated';
-  downloadUrl?: string;
+  certificateType: string;
+  status: 'PENDING' | 'GENERATED' | 'DOWNLOADED' | 'REJECTED';
 }
-
-const certificates: Certificate[] = [
-  { id: '1', name: 'Course Completion Certificate', status: 'not-generated' },
-  { id: '2', name: 'Provisional Certificate', status: 'not-generated' },
-  { id: '3', name: 'Bonafide Certificate', status: 'generated', downloadUrl: '#' },
-];
 
 export function CourseCompletion() {
   const { user } = useAuth();
   const [certificateType, setCertificateType] = useState('');
   const [purpose, setPurpose] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [requests, setRequests] = useState<CertificateRequestRecord[]>([]);
+
+  const loadRequests = () => {
+    api
+      .get<{ requests: CertificateRequestRecord[] }>('/certificates')
+      .then((res) => setRequests(res.requests))
+      .catch(() => {});
+  };
+
+  useEffect(loadRequests, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError('');
 
     if (!certificateType || !purpose) {
       alert('Please select both certificate type and purpose');
@@ -49,9 +55,28 @@ export function CourseCompletion() {
     }
 
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    alert('Certificate request submitted successfully!');
+    try {
+      await api.post('/certificates', { certificateType, purpose });
+      setCertificateType('');
+      setPurpose('');
+      loadRequests();
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Failed to submit request');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDownload = async (id: string) => {
+    try {
+      const { url } = await api.get<{ url: string }>(
+        `/files?entity=certificate&id=${id}&field=generatedCertificateKey`
+      );
+      window.open(url, '_blank');
+      await api.post(`/certificates/${id}/mark-downloaded`).catch(() => {});
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to fetch certificate');
+    }
   };
 
   return (
@@ -90,6 +115,7 @@ export function CourseCompletion() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className={styles.form}>
+            {submitError && <p className={styles.notGenerated}>{submitError}</p>}
             <div className={styles.formGrid}>
               <Select
                 label="Certificate"
@@ -134,16 +160,22 @@ export function CourseCompletion() {
                 </tr>
               </thead>
               <tbody>
-                {certificates.map((cert) => (
-                  <tr key={cert.id}>
-                    <td>{cert.name}</td>
+                {requests.length === 0 && (
+                  <tr>
+                    <td colSpan={2}>No certificate requests yet</td>
+                  </tr>
+                )}
+                {requests.map((req) => (
+                  <tr key={req.id}>
+                    <td>{req.certificateType}</td>
                     <td>
-                      {cert.status === 'generated' ? (
+                      {req.status === 'GENERATED' || req.status === 'DOWNLOADED' ? (
                         <div className={styles.certificateActions}>
                           <Button
                             variant="outline"
                             size="sm"
                             leftIcon={<Eye size={16} />}
+                            onClick={() => handleDownload(req.id)}
                           >
                             View
                           </Button>
@@ -151,6 +183,7 @@ export function CourseCompletion() {
                             variant="secondary"
                             size="sm"
                             leftIcon={<Download size={16} />}
+                            onClick={() => handleDownload(req.id)}
                           >
                             Download
                           </Button>
@@ -158,7 +191,7 @@ export function CourseCompletion() {
                       ) : (
                         <span className={styles.notGenerated}>
                           <AlertCircle size={16} />
-                          Course Completion certificate Not Generated.
+                          {req.status === 'REJECTED' ? 'Request rejected.' : 'Not generated yet.'}
                         </span>
                       )}
                     </td>

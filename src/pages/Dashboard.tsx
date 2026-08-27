@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FileText,
@@ -10,6 +11,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../lib/api';
 import { Card, CardContent, Badge } from '../components/ui';
 import styles from './Dashboard.module.css';
 
@@ -37,24 +39,41 @@ const quickActions = [
   },
 ];
 
-const recentApplications = [
-  {
-    id: '1',
-    type: 'Transcript',
-    referenceNo: 'TRN2024001234',
-    date: '2024-08-25',
-    status: 'processing',
-    amount: 500,
-  },
-  {
-    id: '2',
-    type: 'Course Completion',
-    referenceNo: 'CCR2024005678',
-    date: '2024-08-20',
-    status: 'completed',
-    amount: 250,
-  },
-];
+interface Application {
+  id: string;
+  type: string;
+  referenceNo: string;
+  date: string;
+  status: 'pending' | 'processing' | 'completed';
+  amount: number;
+}
+
+interface TranscriptRecord {
+  id: string;
+  referenceNumber: string;
+  appliedDate: string;
+  status: 'PENDING' | 'APPLIED' | 'PROCESSING' | 'READY' | 'COLLECTED' | 'REJECTED';
+  feeAmount: number;
+}
+
+interface CertificateRecord {
+  id: string;
+  certificateType: string;
+  requestDate: string;
+  status: 'PENDING' | 'GENERATED' | 'DOWNLOADED' | 'REJECTED';
+  feeAmount: number;
+}
+
+function mapTranscriptStatus(status: TranscriptRecord['status']): Application['status'] {
+  if (status === 'READY' || status === 'COLLECTED') return 'completed';
+  if (status === 'PROCESSING' || status === 'APPLIED') return 'processing';
+  return 'pending';
+}
+
+function mapCertificateStatus(status: CertificateRecord['status']): Application['status'] {
+  if (status === 'GENERATED' || status === 'DOWNLOADED') return 'completed';
+  return 'pending';
+}
 
 const getStatusIcon = (status: string) => {
   switch (status) {
@@ -84,6 +103,41 @@ const getStatusBadge = (status: string) => {
 
 export function Dashboard() {
   const { user } = useAuth();
+  const [applications, setApplications] = useState<Application[]>([]);
+
+  useEffect(() => {
+    Promise.all([
+      api.get<{ applications: TranscriptRecord[] }>('/transcripts'),
+      api.get<{ requests: CertificateRecord[] }>('/certificates'),
+    ])
+      .then(([transcripts, certificates]) => {
+        const fromTranscripts: Application[] = transcripts.applications.map((t) => ({
+          id: t.id,
+          type: 'Transcript',
+          referenceNo: t.referenceNumber,
+          date: t.appliedDate,
+          status: mapTranscriptStatus(t.status),
+          amount: t.feeAmount,
+        }));
+        const fromCertificates: Application[] = certificates.requests.map((c) => ({
+          id: c.id,
+          type: c.certificateType,
+          referenceNo: c.id.slice(0, 8).toUpperCase(),
+          date: c.requestDate,
+          status: mapCertificateStatus(c.status),
+          amount: c.feeAmount,
+        }));
+        setApplications(
+          [...fromTranscripts, ...fromCertificates].sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+          )
+        );
+      })
+      .catch(() => {});
+  }, []);
+
+  const completedCount = applications.filter((a) => a.status === 'completed').length;
+  const inProgressCount = applications.filter((a) => a.status !== 'completed').length;
 
   return (
     <div className={styles.container}>
@@ -100,17 +154,17 @@ export function Dashboard() {
         <div className={styles.welcomeStats}>
           <div className={styles.stat}>
             <TrendingUp size={20} />
-            <span className={styles.statValue}>2</span>
+            <span className={styles.statValue}>{applications.length}</span>
             <span className={styles.statLabel}>Total Applications</span>
           </div>
           <div className={styles.stat}>
             <CheckCircle size={20} />
-            <span className={styles.statValue}>1</span>
+            <span className={styles.statValue}>{completedCount}</span>
             <span className={styles.statLabel}>Completed</span>
           </div>
           <div className={styles.stat}>
             <Clock size={20} />
-            <span className={styles.statValue}>1</span>
+            <span className={styles.statValue}>{inProgressCount}</span>
             <span className={styles.statLabel}>In Progress</span>
           </div>
         </div>
@@ -161,7 +215,12 @@ export function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {recentApplications.map((app) => (
+                {applications.length === 0 && (
+                  <tr>
+                    <td colSpan={5}>No applications yet</td>
+                  </tr>
+                )}
+                {applications.slice(0, 5).map((app) => (
                   <tr key={app.id}>
                     <td>
                       <span className={styles.referenceNo}>{app.referenceNo}</span>

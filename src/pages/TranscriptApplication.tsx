@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Info, FileText, Plus, Minus } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../lib/api';
 import {
   Card,
   CardHeader,
@@ -22,7 +23,16 @@ const collectionModes = [
   { value: 'authorized-by-post', label: 'Authorized person-By Post' },
 ];
 
-const FEE_PER_SET = 250;
+const COLLECTION_MODE_MAP: Record<string, string> = {
+  'applicant-in-person': 'APPLICANT_IN_PERSON',
+  'applicant-by-post': 'APPLICANT_BY_POST',
+  'authorized-in-person': 'AUTHORIZED_IN_PERSON',
+  'authorized-by-post': 'AUTHORIZED_BY_POST',
+};
+
+// Must match FEE_PER_ENVELOPE in backend/src/routes/transcript.ts — backend recalculates
+// the authoritative fee from (notSealed + sealed), this is only a client-side estimate.
+const FEE_PER_ENVELOPE = 200;
 
 export function TranscriptApplication() {
   const { user } = useAuth();
@@ -46,34 +56,70 @@ export function TranscriptApplication() {
   });
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const totalCopies = numberOfSets * 2;
   const totalEnvelopes = notSealed + sealed;
-  const feeAmount = numberOfSets * FEE_PER_SET;
+  const feeAmount = totalEnvelopes * FEE_PER_ENVELOPE;
 
   const isAuthorizedCollection = collectionMode.includes('authorized');
   const isByPost = collectionMode.includes('post');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError('');
 
     if (!agreedToTerms) {
       alert('Please agree to the terms and conditions');
       return;
     }
+    if (!files.applicantId || !files.markSheet) {
+      setSubmitError('Please upload applicant ID proof and mark sheet');
+      return;
+    }
+    if (isAuthorizedCollection && (!files.authorizedId || !files.authorizationLetter)) {
+      setSubmitError('Please upload the authorized person\'s ID proof and authorization letter');
+      return;
+    }
 
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const formData = new FormData();
+      formData.append('numberOfSets', String(numberOfSets));
+      formData.append('notSealed', String(notSealed));
+      formData.append('sealed', String(sealed));
+      formData.append('collectionMode', COLLECTION_MODE_MAP[collectionMode]);
+      if (isAuthorizedCollection || isByPost) {
+        formData.append('authorizedName', authorizedPerson.name);
+        formData.append('authorizedRelationship', authorizedPerson.relationship);
+        formData.append('authorizedAddress', authorizedPerson.address);
+        formData.append('authorizedMobile', authorizedPerson.mobile);
+      }
+      if (files.applicantId) formData.append('applicantIdProof', files.applicantId);
+      if (files.markSheet) formData.append('markSheet', files.markSheet);
+      if (files.authorizedId) formData.append('authorizedIdProof', files.authorizedId);
+      if (files.authorizationLetter) formData.append('authorizationLetter', files.authorizationLetter);
 
-    navigate('/payment', {
-      state: {
-        amount: feeAmount,
-        type: 'Transcript Fee',
-        description: `${numberOfSets} set(s) of Transcript`,
-      },
-    });
+      const { application } = await api.post<{ application: { id: string; feeAmount: number } }>(
+        '/transcripts',
+        formData
+      );
+
+      navigate('/payment', {
+        state: {
+          entity: 'transcript',
+          entityId: application.id,
+          amount: application.feeAmount,
+          type: 'Transcript Fee',
+          description: `${numberOfSets} set(s) of Transcript`,
+        },
+      });
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Failed to submit application');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const incrementSets = () => setNumberOfSets((prev) => prev + 1);
@@ -312,6 +358,7 @@ export function TranscriptApplication() {
           </CardHeader>
           <CardContent>
             <div className={styles.feeSection}>
+              {submitError && <div className={styles.infoAlert}>{submitError}</div>}
               <div className={styles.feeRow}>
                 <span>Fee Details (INR)</span>
                 <span className={styles.feeAmount}>
