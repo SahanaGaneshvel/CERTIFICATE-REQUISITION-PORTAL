@@ -79,7 +79,7 @@ export function Registration() {
       <div className={styles.content}>
         <div className={styles.header}>
           <img
-            src="/hindustan-logo.svg"
+            src="/hindustan-logo.png"
             alt="Hindustan Institute of Technology & Science"
             className={styles.logo}
           />

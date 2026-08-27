@@ -81,7 +81,7 @@ export function Payment() {
         {/* Order Summary */}
         <Card variant="elevated" padding="lg" className={styles.summaryCard}>
           <div className={styles.summaryHeader}>
-            <img src="/hindustan-logo.svg" alt="HITS" className={styles.logo} />
+            <img src="/hindustan-logo.png" alt="HITS" className={styles.logo} />
             <div>
               <h2 className={styles.institutionName}>Hindustan Institute of Technology & Science</h2>
               <p className={styles.portalName}>Certificate Requisition Portal</p>

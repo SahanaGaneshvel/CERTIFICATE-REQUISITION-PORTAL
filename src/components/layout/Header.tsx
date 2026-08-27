@@ -13,7 +13,7 @@ export function Header({ onLogout }: HeaderProps) {
     <header className={styles.header}>
       <div className={styles.brand}>
         <img
-          src="/hindustan-logo.svg"
+          src="/hindustan-logo.png"
           alt="Hindustan Institute of Technology & Science"
           className={styles.logo}
         />
