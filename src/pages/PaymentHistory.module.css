@@ -1,0 +1,162 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--gray-900);
+  margin: 0;
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.statIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  color: var(--white);
+}
+
+.successBg {
+  background: var(--success);
+}
+
+.failedBg {
+  background: var(--error);
+}
+
+.pendingBg {
+  background: var(--warning);
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.statValue {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+.statLabel {
+  font-size: var(--font-size-sm);
+  color: var(--gray-500);
+}
+
+/* Table Header */
+.tableHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.tableActions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+/* Table */
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.table th,
+.table td {
+  padding: var(--spacing-md) var(--spacing-lg);
+  text-align: left;
+  border-bottom: 1px solid var(--gray-100);
+  white-space: nowrap;
+}
+
+.table th {
+  font-weight: 600;
+  color: var(--gray-600);
+  background: var(--gray-50);
+}
+
+.table td {
+  color: var(--gray-700);
+}
+
+.table tbody tr:hover {
+  background: var(--gray-50);
+}
+
+.studentId {
+  font-weight: 600;
+  color: var(--gray-900);
+}
+
+.transId {
+  font-family: monospace;
+  font-size: var(--font-size-xs);
+}
+
+.amount {
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.statusCell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.successIcon {
+  color: var(--success);
+}
+
+.failedIcon {
+  color: var(--error);
+}
+
+.pendingIcon {
+  color: var(--warning);
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .tableHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+}

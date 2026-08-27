@@ -1,0 +1,178 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--gray-900);
+  margin: 0;
+}
+
+/* Profile Card */
+.profileCard {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, #0f3460 100%);
+}
+
+.profileHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.avatarSection {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  color: var(--white);
+  box-shadow: var(--shadow-lg);
+}
+
+.avatarInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.profileName {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--white);
+  margin: 0;
+}
+
+.profileId {
+  font-size: var(--font-size-md);
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.profileCourse {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.profileBadges {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* Sections Grid */
+.sectionsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.sectionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(245, 130, 31, 0.1);
+  border-radius: var(--radius-lg);
+  color: var(--primary-orange);
+}
+
+/* Fields Grid */
+.fieldsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.field {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--gray-50);
+  border-radius: var(--radius-lg);
+  transition: background var(--transition-fast);
+}
+
+.field:hover {
+  background: var(--gray-100);
+}
+
+.fieldIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  color: var(--gray-500);
+  flex-shrink: 0;
+}
+
+.fieldContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.fieldLabel {
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fieldValue {
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  color: var(--gray-800);
+  word-break: break-word;
+}
+
+@media (max-width: 768px) {
+  .profileHeader {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  .avatarSection {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profileBadges {
+    justify-content: center;
+  }
+
+  .fieldsGrid {
+    grid-template-columns: 1fr;
+  }
+}

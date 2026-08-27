@@ -1,0 +1,76 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--gray-700);
+}
+
+.required {
+  color: var(--error);
+  margin-left: 2px;
+}
+
+.selectWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.select {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  padding-right: 3rem;
+  font-size: var(--font-size-md);
+  color: var(--gray-800);
+  background: var(--white);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+  appearance: none;
+  cursor: pointer;
+}
+
+.select:hover {
+  border-color: var(--gray-300);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--primary-orange);
+  box-shadow: 0 0 0 3px rgba(245, 130, 31, 0.1);
+}
+
+.select:disabled {
+  background: var(--gray-100);
+  cursor: not-allowed;
+}
+
+.icon {
+  position: absolute;
+  right: var(--spacing-md);
+  color: var(--gray-400);
+  pointer-events: none;
+}
+
+.hasError .select {
+  border-color: var(--error);
+}
+
+.hasError .select:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.error {
+  font-size: var(--font-size-sm);
+  color: var(--error);
+}
+
+.helperText {
+  font-size: var(--font-size-sm);
+  color: var(--gray-500);
+}

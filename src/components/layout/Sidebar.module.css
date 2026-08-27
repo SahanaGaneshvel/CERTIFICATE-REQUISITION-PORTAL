@@ -1,0 +1,220 @@
+.mobileToggle {
+  display: none;
+  position: fixed;
+  bottom: var(--spacing-xl);
+  right: var(--spacing-xl);
+  width: 56px;
+  height: 56px;
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: var(--radius-full);
+  color: var(--white);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-fixed);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar {
+  width: 280px;
+  height: 100%;
+  background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.studentInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl);
+  background: rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.studentAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-lg);
+  color: var(--white);
+}
+
+.studentDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.studentName {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--white);
+}
+
+.studentInstitution {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-md) 0;
+}
+
+.nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+}
+
+.menuItem {
+  margin: 2px 0;
+}
+
+.menuLink,
+.menuButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--font-size-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.menuLink:hover,
+.menuButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+}
+
+.menuLink.active {
+  background: var(--primary-orange);
+  color: var(--white);
+  border-left: 4px solid var(--secondary-orange);
+}
+
+.menuIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.menuLabel {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menuArrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submenu {
+  background: rgba(0, 0, 0, 0.1);
+  padding: var(--spacing-sm) 0;
+}
+
+.submenuLink {
+  display: block;
+  padding: var(--spacing-sm) var(--spacing-xl);
+  padding-left: calc(var(--spacing-xl) + 36px);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.submenuLink:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--white);
+}
+
+.submenuLink.active {
+  color: var(--primary-orange);
+  background: rgba(245, 130, 31, 0.1);
+}
+
+.footer {
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.userId {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.userName {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--white);
+}
+
+.timestamp {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.overlay {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .mobileToggle {
+    display: flex;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: var(--z-modal);
+    transform: translateX(-100%);
+    transition: transform var(--transition-normal);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: var(--z-modal-backdrop);
+  }
+}
