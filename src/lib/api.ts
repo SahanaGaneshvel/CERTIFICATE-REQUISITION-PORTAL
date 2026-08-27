@@ -1,16 +1,18 @@
 const API_BASE = import.meta.env.VITE_API_URL ?? '/api';
 
-function getToken(): string | null {
-  return localStorage.getItem('token');
+// Student and admin sessions are kept independent so a browser can (in principle)
+// hold both without one login clobbering the other.
+function getToken(scope: 'token' | 'adminToken' = 'token'): string | null {
+  return localStorage.getItem(scope);
 }
 
-export function setToken(token: string | null) {
-  if (token) localStorage.setItem('token', token);
-  else localStorage.removeItem('token');
+export function setToken(token: string | null, scope: 'token' | 'adminToken' = 'token') {
+  if (token) localStorage.setItem(scope, token);
+  else localStorage.removeItem(scope);
 }
 
-async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const token = getToken();
+async function request<T>(path: string, options: RequestInit = {}, scope: 'token' | 'adminToken' = 'token'): Promise<T> {
+  const token = getToken(scope);
   const headers = new Headers(options.headers);
   if (!(options.body instanceof FormData)) {
     headers.set('Content-Type', 'application/json');
@@ -31,4 +33,12 @@ export const api = {
     request<T>(path, { method: 'POST', body: body instanceof FormData ? body : JSON.stringify(body ?? {}) }),
   patch: <T>(path: string, body?: unknown) =>
     request<T>(path, { method: 'PATCH', body: JSON.stringify(body ?? {}) }),
+};
+
+export const adminApi = {
+  get: <T>(path: string) => request<T>(path, {}, 'adminToken'),
+  post: <T>(path: string, body?: unknown) =>
+    request<T>(path, { method: 'POST', body: body instanceof FormData ? body : JSON.stringify(body ?? {}) }, 'adminToken'),
+  patch: <T>(path: string, body?: unknown) =>
+    request<T>(path, { method: 'PATCH', body: JSON.stringify(body ?? {}) }, 'adminToken'),
 };

@@ -1,0 +1,333 @@
+import { useEffect, useState } from 'react';
+import { Eye, Upload, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { adminApi } from '../../lib/api';
+import { Card, CardHeader, CardTitle, CardContent, Button, Badge, Select, Modal } from '../../components/ui';
+import styles from '../PaymentHistory.module.css';
+import detailStyles from './AdminDetail.module.css';
+
+interface TranscriptRecord {
+  id: string;
+  referenceNumber: string;
+  numberOfSets: number;
+  totalEnvelopes: number;
+  collectionMode: string;
+  authorizedName: string | null;
+  authorizedMobile: string | null;
+  applicantIdProofKey: string | null;
+  markSheetKey: string | null;
+  authorizedIdProofKey: string | null;
+  authorizationLetterKey: string | null;
+  generatedCertificateKey: string | null;
+  feeAmount: number;
+  status: 'PENDING' | 'APPLIED' | 'PROCESSING' | 'READY' | 'COLLECTED' | 'REJECTED';
+  paymentStatus: 'PENDING' | 'SUCCESS' | 'FAILED';
+  appliedDate: string;
+  reviewNote: string | null;
+  student: { name: string; registerNo: string; email: string; mobileNumber: string };
+}
+
+const statusFilters = [
+  { value: 'all', label: 'All Statuses' },
+  { value: 'PENDING', label: 'Pending' },
+  { value: 'APPLIED', label: 'Applied' },
+  { value: 'PROCESSING', label: 'Processing' },
+  { value: 'READY', label: 'Ready' },
+  { value: 'COLLECTED', label: 'Collected' },
+  { value: 'REJECTED', label: 'Rejected' },
+];
+
+const nextStatusOptions = [
+  { value: 'APPLIED', label: 'Applied' },
+  { value: 'PROCESSING', label: 'Processing' },
+  { value: 'READY', label: 'Ready' },
+  { value: 'COLLECTED', label: 'Collected' },
+  { value: 'REJECTED', label: 'Rejected' },
+];
+
+function statusBadge(status: string) {
+  if (status === 'READY' || status === 'COLLECTED') return <Badge variant="success">{status}</Badge>;
+  if (status === 'PROCESSING' || status === 'APPLIED') return <Badge variant="warning">{status}</Badge>;
+  if (status === 'REJECTED') return <Badge variant="error">{status}</Badge>;
+  return <Badge variant="info">{status}</Badge>;
+}
+
+function statusIcon(status: string) {
+  if (status === 'READY' || status === 'COLLECTED') return <CheckCircle size={16} className={styles.successIcon} />;
+  if (status === 'REJECTED') return <XCircle size={16} className={styles.failedIcon} />;
+  return <Clock size={16} className={styles.pendingIcon} />;
+}
+
+export function AdminTranscripts() {
+  const [applications, setApplications] = useState<TranscriptRecord[]>([]);
+  const [filter, setFilter] = useState('all');
+  const [isLoading, setIsLoading] = useState(true);
+  const [selected, setSelected] = useState<TranscriptRecord | null>(null);
+  const [newStatus, setNewStatus] = useState('');
+  const [reviewNote, setReviewNote] = useState('');
+  const [certificateFile, setCertificateFile] = useState<File | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [actionError, setActionError] = useState('');
+
+  const load = () => {
+    setIsLoading(true);
+    adminApi
+      .get<{ applications: TranscriptRecord[] }>('/admin/transcripts')
+      .then((res) => setApplications(res.applications))
+      .catch(() => {})
+      .finally(() => setIsLoading(false));
+  };
+
+  useEffect(load, []);
+
+  const filtered = applications.filter((a) => filter === 'all' || a.status === filter);
+
+  const openDetail = (record: TranscriptRecord) => {
+    setSelected(record);
+    setNewStatus(record.status);
+    setReviewNote(record.reviewNote ?? '');
+    setCertificateFile(null);
+    setActionError('');
+  };
+
+  const viewFile = async (field: string) => {
+    if (!selected) return;
+    try {
+      const { url } = await adminApi.get<{ url: string }>(
+        `/files?entity=transcript&id=${selected.id}&field=${field}`
+      );
+      window.open(url, '_blank');
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Failed to load file');
+    }
+  };
+
+  const saveStatus = async () => {
+    if (!selected) return;
+    setIsSaving(true);
+    setActionError('');
+    try {
+      await adminApi.patch(`/admin/transcripts/${selected.id}/status`, {
+        status: newStatus,
+        reviewNote: reviewNote || undefined,
+      });
+      setSelected(null);
+      load();
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Failed to update status');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const uploadCertificate = async () => {
+    if (!selected || !certificateFile) return;
+    setIsSaving(true);
+    setActionError('');
+    try {
+      const formData = new FormData();
+      formData.append('certificate', certificateFile);
+      await adminApi.post(`/admin/transcripts/${selected.id}/upload-certificate`, formData);
+      setSelected(null);
+      load();
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Failed to upload certificate');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>Transcript Requests</h1>
+      </div>
+
+      <Card variant="elevated" padding="lg">
+        <CardHeader>
+          <div className={styles.tableHeader}>
+            <CardTitle>Requests</CardTitle>
+            <div className={styles.tableActions}>
+              <Select options={statusFilters} value={filter} onChange={(e) => setFilter(e.target.value)} />
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Reference</th>
+                  <th>Student</th>
+                  <th>Sets</th>
+                  <th>Fee</th>
+                  <th>Payment</th>
+                  <th>Status</th>
+                  <th>Applied</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading && (
+                  <tr>
+                    <td colSpan={8}>Loading...</td>
+                  </tr>
+                )}
+                {!isLoading && filtered.length === 0 && (
+                  <tr>
+                    <td colSpan={8}>No requests found</td>
+                  </tr>
+                )}
+                {filtered.map((app) => (
+                  <tr key={app.id}>
+                    <td className={styles.transId}>{app.referenceNumber}</td>
+                    <td className={styles.studentId}>
+                      {app.student.name} ({app.student.registerNo})
+                    </td>
+                    <td>{app.numberOfSets}</td>
+                    <td className={styles.amount}>&#8377; {app.feeAmount.toFixed(2)}</td>
+                    <td>
+                      <Badge variant={app.paymentStatus === 'SUCCESS' ? 'success' : app.paymentStatus === 'FAILED' ? 'error' : 'warning'}>
+                        {app.paymentStatus}
+                      </Badge>
+                    </td>
+                    <td>
+                      <div className={styles.statusCell}>
+                        {statusIcon(app.status)}
+                        {statusBadge(app.status)}
+                      </div>
+                    </td>
+                    <td>{new Date(app.appliedDate).toLocaleDateString('en-IN')}</td>
+                    <td>
+                      <Button variant="outline" size="sm" leftIcon={<Eye size={14} />} onClick={() => openDetail(app)}>
+                        Review
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Modal isOpen={!!selected} onClose={() => setSelected(null)} title="Transcript Request" size="lg">
+        {selected && (
+          <div className={detailStyles.detail}>
+            <div className={detailStyles.infoGrid}>
+              <div className={detailStyles.infoItem}>
+                <span className={detailStyles.infoLabel}>Reference</span>
+                <span className={detailStyles.infoValue}>{selected.referenceNumber}</span>
+              </div>
+              <div className={detailStyles.infoItem}>
+                <span className={detailStyles.infoLabel}>Student</span>
+                <span className={detailStyles.infoValue}>
+                  {selected.student.name} ({selected.student.registerNo})
+                </span>
+              </div>
+              <div className={detailStyles.infoItem}>
+                <span className={detailStyles.infoLabel}>Contact</span>
+                <span className={detailStyles.infoValue}>
+                  {selected.student.email || 'n/a'} · {selected.student.mobileNumber || 'n/a'}
+                </span>
+              </div>
+              <div className={detailStyles.infoItem}>
+                <span className={detailStyles.infoLabel}>Sets / Envelopes</span>
+                <span className={detailStyles.infoValue}>
+                  {selected.numberOfSets} sets, {selected.totalEnvelopes} envelopes
+                </span>
+              </div>
+              <div className={detailStyles.infoItem}>
+                <span className={detailStyles.infoLabel}>Collection Mode</span>
+                <span className={detailStyles.infoValue}>{selected.collectionMode.replaceAll('_', ' ')}</span>
+              </div>
+              <div className={detailStyles.infoItem}>
+                <span className={detailStyles.infoLabel}>Fee / Payment</span>
+                <span className={detailStyles.infoValue}>
+                  &#8377; {selected.feeAmount.toFixed(2)} — {selected.paymentStatus}
+                </span>
+              </div>
+              {selected.authorizedName && (
+                <div className={detailStyles.infoItem}>
+                  <span className={detailStyles.infoLabel}>Authorized Person</span>
+                  <span className={detailStyles.infoValue}>
+                    {selected.authorizedName} ({selected.authorizedMobile})
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <div className={detailStyles.filesSection}>
+              <h4>Uploaded Documents</h4>
+              <div className={detailStyles.fileButtons}>
+                {selected.applicantIdProofKey && (
+                  <Button variant="outline" size="sm" onClick={() => viewFile('applicantIdProofKey')}>
+                    Applicant ID Proof
+                  </Button>
+                )}
+                {selected.markSheetKey && (
+                  <Button variant="outline" size="sm" onClick={() => viewFile('markSheetKey')}>
+                    Mark Sheet
+                  </Button>
+                )}
+                {selected.authorizedIdProofKey && (
+                  <Button variant="outline" size="sm" onClick={() => viewFile('authorizedIdProofKey')}>
+                    Authorized ID Proof
+                  </Button>
+                )}
+                {selected.authorizationLetterKey && (
+                  <Button variant="outline" size="sm" onClick={() => viewFile('authorizationLetterKey')}>
+                    Authorization Letter
+                  </Button>
+                )}
+                {selected.generatedCertificateKey && (
+                  <Button variant="secondary" size="sm" onClick={() => viewFile('generatedCertificateKey')}>
+                    Generated Transcript
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {actionError && <div className={detailStyles.errorAlert}>{actionError}</div>}
+
+            <div className={detailStyles.actionSection}>
+              <h4>Update Status</h4>
+              <div className={detailStyles.actionRow}>
+                <Select options={nextStatusOptions} value={newStatus} onChange={(e) => setNewStatus(e.target.value)} />
+                <Button onClick={saveStatus} isLoading={isSaving}>
+                  Save Status
+                </Button>
+              </div>
+              <textarea
+                className={detailStyles.noteInput}
+                placeholder="Optional review note"
+                value={reviewNote}
+                onChange={(e) => setReviewNote(e.target.value)}
+                rows={2}
+              />
+            </div>
+
+            <div className={detailStyles.actionSection}>
+              <h4>Upload Generated Transcript</h4>
+              <div className={detailStyles.actionRow}>
+                <input
+                  type="file"
+                  accept=".pdf,.jpg,.jpeg,.png,.webp"
+                  onChange={(e) => setCertificateFile(e.target.files?.[0] ?? null)}
+                />
+                <Button
+                  variant="secondary"
+                  leftIcon={<Upload size={16} />}
+                  onClick={uploadCertificate}
+                  isLoading={isSaving}
+                  disabled={!certificateFile}
+                >
+                  Upload &amp; Mark Ready
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </Modal>
+    </div>
+  );
+}

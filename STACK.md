@@ -145,20 +145,27 @@ list.
 - `npx tsc --noEmit` passes in `backend/` (no type errors)
 - `npm run build` passes in the frontend (no type errors, production bundle builds)
 - `docker compose build` succeeds for both `backend` and `frontend` images
-- `docker compose up -d` brings up all 5 containers, `postgres` and `minio` report
+- `docker compose up -d` brings up all 5 containers; `postgres` and `minio` report
   healthy
 - Prisma migration `20260827141709_init` was generated against the real schema,
   applied to the running database, and baked into the backend image so
   `prisma migrate deploy` applies it automatically on any fresh container start
-- The database was seeded with a demo admin (`ADMIN001` / `ChangeMe123!`) and student
-  (`RA2311003010079`, DOB `15-03-2005`) account
+- `npm run seed:prod` (the compiled seed script, run inside the container) seeds a
+  demo admin (`ADMIN001` / `ChangeMe123!`) and student (`RA2311003010079`, DOB
+  `15-03-2005`) account
+- End-to-end request flow verified via curl through the Nginx reverse proxy on port
+  80: student login → JWT issued → `GET /api/auth/me` with the token → admin login →
+  student creates a certificate request → admin sees it in
+  `GET /api/admin/certificate-requests`. Frontend also confirmed serving (`GET /`
+  returns 200 through Nginx).
 
-**Not verified**: a full click-through of the running stack in a browser — Docker
-Desktop became unresponsive ("Docker Desktop is unable to start") partway through
-this session, after the stack had already been confirmed up and the database seeded
-once, but before a second rebuild (adding a compiled `seed:prod` script) could be
-re-tested. Restart Docker Desktop and run `docker compose up --build -d` to pick up
-where this left off — the `seed:prod` script needs to be re-verified.
+**Not verified**: a full click-through in an actual browser (forms, file uploads,
+the payment flow UI, admin actions) — only the API surface was exercised via curl.
+Docker Desktop did crash once mid-session ("Docker Desktop is unable to start") but
+recovered on restart with no state loss; a bug found afterward (the `seed:prod`
+TypeScript compile step in `backend/Dockerfile` used an invalid `tsc` flag
+combination, and the compiled output path didn't match `package.json`) has been
+fixed and re-verified.
 
 ## Suggested next steps
 

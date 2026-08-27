@@ -9,7 +9,7 @@ FROM deps AS build
 COPY . .
 RUN npx prisma generate
 RUN npm run build
-RUN npx tsc -p tsconfig.json --outDir dist-scripts prisma/seed.ts
+RUN npx tsc --esModuleInterop --module CommonJS --target ES2022 --skipLibCheck --outDir dist-scripts prisma/seed.ts
 
 FROM base AS runtime
 ENV NODE_ENV=production

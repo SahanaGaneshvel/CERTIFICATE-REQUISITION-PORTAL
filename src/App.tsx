@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { AdminAuthProvider, useAdminAuth } from './context/AdminAuthContext';
 import { DashboardLayout } from './components/layout';
+import { AdminLayout } from './components/admin/AdminLayout';
 import {
   Login,
   Registration,
@@ -13,6 +15,7 @@ import {
   CourseCompletion,
   PaymentHistory,
 } from './pages';
+import { AdminLogin, AdminDashboard, AdminTranscripts, AdminCertificates } from './pages/admin';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, user } = useAuth();
@@ -50,6 +53,30 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
       return <Navigate to="/registration" replace />;
     }
     return <Navigate to="/dashboard" replace />;
+  }
+
+  return <>{children}</>;
+}
+
+function AdminProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, isLoading } = useAdminAuth();
+
+  if (isLoading) return null;
+
+  if (!isAuthenticated) {
+    return <Navigate to="/admin/login" replace />;
+  }
+
+  return <>{children}</>;
+}
+
+function AdminPublicRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, isLoading } = useAdminAuth();
+
+  if (isLoading) return null;
+
+  if (isAuthenticated) {
+    return <Navigate to="/admin/dashboard" replace />;
   }
 
   return <>{children}</>;
@@ -121,6 +148,29 @@ function AppRoutes() {
         }
       />
 
+      {/* Admin Routes */}
+      <Route
+        path="/admin/login"
+        element={
+          <AdminPublicRoute>
+            <AdminLogin />
+          </AdminPublicRoute>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <AdminProtectedRoute>
+            <AdminLayout />
+          </AdminProtectedRoute>
+        }
+      >
+        <Route index element={<Navigate to="/admin/dashboard" replace />} />
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="transcripts" element={<AdminTranscripts />} />
+        <Route path="certificates" element={<AdminCertificates />} />
+      </Route>
+
       {/* Catch all */}
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
@@ -131,7 +181,9 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <AppRoutes />
+        <AdminAuthProvider>
+          <AppRoutes />
+        </AdminAuthProvider>
       </AuthProvider>
     </Router>
   );
