@@ -1,24 +1,19 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
   User,
-  CreditCard,
   FileText,
-  GraduationCap,
-  ClipboardList,
-  Calendar,
-  Building2,
-  BarChart3,
-  Bus,
-  Wallet,
-  Bell,
-  MessageSquare,
+  Award,
+  ClipboardCheck,
+  CreditCard,
   ChevronDown,
   ChevronRight,
   Menu,
   X,
+  LogOut,
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import styles from './Sidebar.module.css';
 
 interface MenuItem {
@@ -36,93 +31,28 @@ const menuItems: MenuItem[] = [
   },
   {
     icon: <User size={20} />,
-    label: 'Personal Details',
+    label: 'My Profile',
     path: '/profile',
   },
   {
+    icon: <FileText size={20} />,
+    label: 'Apply for Transcript',
+    path: '/transcript',
+  },
+  {
+    icon: <Award size={20} />,
+    label: 'Certificate Request',
+    path: '/certificates',
+  },
+  {
+    icon: <ClipboardCheck size={20} />,
+    label: 'Application Status',
+    path: '/application-status',
+  },
+  {
     icon: <CreditCard size={20} />,
-    label: 'Fee Payment',
-    path: '/fee-payment',
-  },
-  {
-    icon: <BarChart3 size={20} />,
-    label: 'Grade / Mark & Credit',
-    path: '/grades',
-  },
-  {
-    icon: <GraduationCap size={20} />,
-    label: 'Course Status',
-    path: '/course-status',
-  },
-  {
-    icon: <Calendar size={20} />,
-    label: 'Academic Calendar/Planner',
-    path: '/academic-calendar',
-  },
-  {
-    icon: <ClipboardList size={20} />,
-    label: 'Student Course Registration',
-    path: '/course-registration',
-  },
-  {
-    icon: <FileText size={20} />,
-    label: 'Attendance Details',
-    path: '/attendance',
-  },
-  {
-    icon: <FileText size={20} />,
-    label: 'Exam Provisional Results',
-    path: '/provisional-results',
-  },
-  {
-    icon: <FileText size={20} />,
-    label: 'Exam Revaluation Results',
-    path: '/revaluation-results',
-  },
-  {
-    icon: <Calendar size={20} />,
-    label: 'Timetable',
-    path: '/timetable',
-  },
-  {
-    icon: <Building2 size={20} />,
-    label: 'Hostel',
-    path: '/hostel',
-  },
-  {
-    icon: <FileText size={20} />,
-    label: 'Internal Mark Details',
-    path: '/internal-marks',
-  },
-  {
-    icon: <Bus size={20} />,
-    label: 'Transport Details',
-    path: '/transport',
-  },
-  {
-    icon: <Wallet size={20} />,
-    label: 'Finance Details',
-    path: '/finance',
-  },
-  {
-    icon: <Bell size={20} />,
-    label: 'Notice Board',
-    path: '/notices',
-  },
-  {
-    icon: <MessageSquare size={20} />,
-    label: 'Student Feedback',
-    path: '/feedback',
-  },
-  {
-    icon: <FileText size={20} />,
-    label: 'ABC ID Generation',
-    path: '/abc-id',
-  },
-  {
-    icon: <Bus size={20} />,
-    label: 'Transport Booking',
-    path: '/transport-booking',
+    label: 'Payment History',
+    path: '/payment-history',
   },
 ];
 
@@ -132,6 +62,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen, onToggle }: SidebarProps) {
+  const { user, logout } = useAuth();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
   const toggleExpand = (label: string) => {
@@ -140,6 +71,21 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
         ? prev.filter((item) => item !== label)
         : [...prev, label]
     );
+  };
+
+  const formatDate = () => {
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    };
+    return now.toLocaleDateString('en-IN', options).replace(/,/g, '');
   };
 
   return (
@@ -207,13 +153,21 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
               )}
             </div>
           ))}
+
+          {/* Logout Button */}
+          <div className={styles.menuItem}>
+            <button className={styles.menuLink} onClick={logout}>
+              <span className={styles.menuIcon}><LogOut size={20} /></span>
+              <span className={styles.menuLabel}>Logout</span>
+            </button>
+          </div>
         </nav>
 
         <div className={styles.footer}>
           <div className={styles.userInfo}>
-            <span className={styles.userId}>RA2311003010079</span>
-            <span className={styles.userName}>VIJAY BALA MAHALINGAM</span>
-            <span className={styles.timestamp}>Thu 27-Aug-2026 09:51:16</span>
+            <span className={styles.userId}>{user?.registerNo || 'Student'}</span>
+            <span className={styles.userName}>{user?.name || 'User'}</span>
+            <span className={styles.timestamp}>{formatDate()}</span>
           </div>
         </div>
       </aside>

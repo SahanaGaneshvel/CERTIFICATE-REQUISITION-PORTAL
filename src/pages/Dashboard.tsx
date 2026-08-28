@@ -25,9 +25,9 @@ const quickActions = [
   },
   {
     icon: <Award size={24} />,
-    title: 'Course Completion',
-    description: 'Download course completion certificates',
-    path: '/course-completion',
+    title: 'Certificate Request',
+    description: 'Request certificates (Bonafide, Course Completion, etc.)',
+    path: '/certificates',
     color: 'green',
   },
   {
@@ -197,7 +197,7 @@ export function Dashboard() {
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Recent Applications</h2>
-          <Link to="/payment-history" className={styles.viewAllLink}>
+          <Link to="/application-status" className={styles.viewAllLink}>
             View All <ArrowRight size={16} />
           </Link>
         </div>

@@ -8,3 +8,4 @@ export { PaymentSuccess } from './PaymentSuccess';
 export { PaymentFailed } from './PaymentFailed';
 export { CourseCompletion } from './CourseCompletion';
 export { PaymentHistory } from './PaymentHistory';
+export { ApplicationStatus } from './ApplicationStatus';

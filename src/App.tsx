@@ -14,6 +14,7 @@ import {
   PaymentFailed,
   CourseCompletion,
   PaymentHistory,
+  ApplicationStatus,
 } from './pages';
 import { AdminLogin, AdminDashboard, AdminTranscripts, AdminCertificates } from './pages/admin';
 
@@ -118,7 +119,8 @@ function AppRoutes() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="profile" element={<Profile />} />
         <Route path="transcript" element={<TranscriptApplication />} />
-        <Route path="course-completion" element={<CourseCompletion />} />
+        <Route path="certificates" element={<CourseCompletion />} />
+        <Route path="application-status" element={<ApplicationStatus />} />
         <Route path="payment-history" element={<PaymentHistory />} />
       </Route>
 

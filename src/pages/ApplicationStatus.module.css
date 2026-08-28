@@ -1,0 +1,263 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--gray-900);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--gray-500);
+  margin: 0;
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.statIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  color: var(--white);
+}
+
+.totalBg {
+  background: var(--primary-orange);
+}
+
+.pendingBg {
+  background: var(--info);
+}
+
+.processingBg {
+  background: var(--warning);
+}
+
+.completedBg {
+  background: var(--success);
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.statValue {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+.statLabel {
+  font-size: var(--font-size-sm);
+  color: var(--gray-500);
+}
+
+/* Quick Actions */
+.quickActions {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.quickAction {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  color: var(--gray-700);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.quickAction:hover {
+  background: var(--gray-50);
+  border-color: var(--primary-orange);
+  color: var(--primary-orange);
+}
+
+.quickAction span {
+  font-weight: 500;
+}
+
+/* Table Header */
+.tableHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.filters {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+/* Sections */
+.section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--gray-800);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Table */
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.table th,
+.table td {
+  padding: var(--spacing-md) var(--spacing-lg);
+  text-align: left;
+  border-bottom: 1px solid var(--gray-100);
+  white-space: nowrap;
+}
+
+.table th {
+  font-weight: 600;
+  color: var(--gray-600);
+  background: var(--gray-50);
+}
+
+.table td {
+  color: var(--gray-700);
+}
+
+.table tbody tr:hover {
+  background: var(--gray-50);
+}
+
+.refNo, .certType {
+  font-weight: 600;
+  color: var(--gray-900);
+}
+
+.amount {
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.statusCell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.iconSuccess {
+  color: var(--success);
+}
+
+.iconError {
+  color: var(--error);
+}
+
+.iconWarning {
+  color: var(--warning);
+}
+
+.iconInfo {
+  color: var(--info);
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* Empty State */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3xl);
+  text-align: center;
+  color: var(--gray-400);
+}
+
+.emptyState h3 {
+  margin: var(--spacing-lg) 0 var(--spacing-sm);
+  color: var(--gray-700);
+  font-size: var(--font-size-lg);
+}
+
+.emptyState p {
+  margin: 0 0 var(--spacing-lg);
+  color: var(--gray-500);
+}
+
+.emptyActions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.loading {
+  padding: var(--spacing-3xl);
+  text-align: center;
+  color: var(--gray-500);
+}
+
+@media (max-width: 1024px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .tableHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+
+  .quickActions {
+    flex-direction: column;
+  }
+}

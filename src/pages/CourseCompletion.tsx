@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FileText, Download, Eye, AlertCircle } from 'lucide-react';
+import { Download, Eye, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../lib/api';
 import { Card, CardHeader, CardTitle, CardContent, Button, Select, Badge } from '../components/ui';
@@ -82,27 +82,8 @@ export function CourseCompletion() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Course Completion</h1>
-      </div>
-
-      {/* Navigation Tabs */}
-      <div className={styles.tabs}>
-        <button className={`${styles.tab} ${styles.active}`}>
-          <FileText size={18} />
-          Bonafide
-        </button>
-        <button className={styles.tab}>
-          <FileText size={18} />
-          Train Concession
-        </button>
-        <button className={styles.tab}>
-          <FileText size={18} />
-          Course Completion
-        </button>
-        <button className={styles.tab}>
-          <FileText size={18} />
-          SRM Future Professor Scheme
-        </button>
+        <h1 className={styles.title}>Certificate Request</h1>
+        <p className={styles.subtitle}>Request various certificates for your academic and professional needs</p>
       </div>
 
       {/* Certificate Request Form */}
