@@ -21,7 +21,7 @@ docker compose exec backend npm run seed:prod
 ```
 
 Admin login: `ADMIN001` / `ChangeMe123!`
-Student login: `RA2311003010079` / DOB `15-03-2005` (as entered on the login form)
+Student login: `24CU0310001` / DOB `15-03-2005` (as entered on the login form)
 
 **Change the seeded admin password immediately in any real deployment.**
 

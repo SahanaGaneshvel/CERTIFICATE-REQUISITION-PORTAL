@@ -18,7 +18,7 @@ async function main() {
       campus: '',
       gender: '',
       admittedYear: 0,
-      institution: 'HITS',
+      institution: 'Hindustan Institute of Technology and Science, Chennai',
       role: 'ADMIN',
       isRegistered: true,
     },
@@ -26,19 +26,19 @@ async function main() {
 
   const studentDobHash = await bcrypt.hash('15-03-2005', 10);
   await prisma.user.upsert({
-    where: { registerNo: 'RA2311003010079' },
+    where: { registerNo: '24CU0310001' },
     update: {},
     create: {
-      registerNo: 'RA2311003010079',
+      registerNo: '24CU0310001',
       passwordHash: studentDobHash,
       name: 'Vijay Bala Mahalingam',
       dateOfBirth: '15-03-2005',
       degree: 'B.Tech',
       branch: 'Computer Science and Engineering',
-      campus: 'Kattankulathur',
+      campus: 'Chennai',
       gender: 'Male',
-      admittedYear: 2023,
-      institution: 'Faculty of Engineering and Technology, Kattankulathur',
+      admittedYear: 2024,
+      institution: 'Hindustan Institute of Technology and Science, Chennai',
       role: 'STUDENT',
     },
   });

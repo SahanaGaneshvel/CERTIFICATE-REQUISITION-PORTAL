@@ -47,7 +47,7 @@ export function AdminLogin() {
         <div className={styles.brandSection}>
           <div className={styles.logoContainer}>
             <img
-              src="/hindustan-logo.svg"
+              src="/hindustan-logo.png"
               alt="Hindustan Institute of Technology & Science"
               className={styles.logo}
             />
