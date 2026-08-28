@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { prisma } from '../lib/prisma';
 import { requireAuth } from '../middleware/auth';
 import { getDownloadUrl } from '../lib/storage';
+import { asyncHandler } from '../lib/asyncHandler';
 
 export const filesRouter = Router();
 filesRouter.use(requireAuth);
@@ -23,7 +24,7 @@ const querySchema = z.object({
 
 // Issues a short-lived presigned URL for a stored file, after checking the requester
 // owns the record (or is an admin). Files are never served directly through this API.
-filesRouter.get('/', async (req, res) => {
+filesRouter.get('/', asyncHandler(async (req, res) => {
   const { entity, id, field } = querySchema.parse(req.query);
   const isAdmin = req.auth!.role === 'ADMIN';
 
@@ -49,4 +50,4 @@ filesRouter.get('/', async (req, res) => {
   if (!record.generatedCertificateKey) return res.status(404).json({ error: 'File not set' });
   const url = await getDownloadUrl(record.generatedCertificateKey);
   res.json({ url });
-});
+}));

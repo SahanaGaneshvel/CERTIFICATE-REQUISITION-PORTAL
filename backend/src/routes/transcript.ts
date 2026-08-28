@@ -6,6 +6,7 @@ import { requireAuth } from '../middleware/auth';
 import { upload } from '../middleware/upload';
 import { uploadBuffer } from '../lib/storage';
 import { logAudit } from '../lib/audit';
+import { asyncHandler } from '../lib/asyncHandler';
 
 export const transcriptRouter = Router();
 transcriptRouter.use(requireAuth);
@@ -30,7 +31,7 @@ const uploadFields = upload.fields([
   { name: 'authorizationLetter', maxCount: 1 },
 ]);
 
-transcriptRouter.post('/', uploadFields, async (req, res) => {
+transcriptRouter.post('/', uploadFields, asyncHandler(async (req, res) => {
   const data = createSchema.parse(req.body);
   const totalEnvelopes = data.notSealed + data.sealed;
   const files = req.files as Record<string, Express.Multer.File[]> | undefined;
@@ -78,21 +79,21 @@ transcriptRouter.post('/', uploadFields, async (req, res) => {
 
   await logAudit(req.auth!.userId, 'CREATE', 'TranscriptApplication', record.id);
   res.status(201).json({ application: record });
-});
+}));
 
-transcriptRouter.get('/', async (req, res) => {
+transcriptRouter.get('/', asyncHandler(async (req, res) => {
   const applications = await prisma.transcriptApplication.findMany({
     where: { studentId: req.auth!.userId },
     orderBy: { createdAt: 'desc' },
   });
   res.json({ applications });
-});
+}));
 
-transcriptRouter.get('/:id', async (req, res) => {
+transcriptRouter.get('/:id', asyncHandler(async (req, res) => {
   const record = await prisma.transcriptApplication.findUnique({ where: { id: req.params.id } });
   if (!record) return res.status(404).json({ error: 'Not found' });
   if (record.studentId !== req.auth!.userId && req.auth!.role !== 'ADMIN') {
     return res.status(403).json({ error: 'Forbidden' });
   }
   res.json({ application: record });
-});
+}));

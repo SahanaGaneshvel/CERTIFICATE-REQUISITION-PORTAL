@@ -13,6 +13,12 @@ import { adminRouter } from './routes/admin';
 import { filesRouter } from './routes/files';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 
+// Last-resort safety net: every route is wrapped in asyncHandler (see lib/asyncHandler.ts)
+// so this should never fire, but log rather than let an unexpected rejection kill the process.
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled rejection:', reason);
+});
+
 const app = express();
 
 // Behind the nginx reverse proxy container — trust exactly one hop so
