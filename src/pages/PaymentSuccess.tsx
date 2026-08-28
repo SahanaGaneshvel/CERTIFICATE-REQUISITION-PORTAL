@@ -157,10 +157,10 @@ export function PaymentSuccess() {
         </div>
 
         <div className={styles.actions}>
-          <Button variant="outline" leftIcon={<Printer size={18} />}>
+          <Button variant="outline" leftIcon={<Printer size={18} />} onClick={() => window.print()}>
             Print Receipt
           </Button>
-          <Button variant="outline" leftIcon={<Download size={18} />}>
+          <Button variant="outline" leftIcon={<Download size={18} />} onClick={() => window.print()}>
             Download Receipt
           </Button>
           <Button onClick={() => navigate('/dashboard')} leftIcon={<Home size={18} />}>

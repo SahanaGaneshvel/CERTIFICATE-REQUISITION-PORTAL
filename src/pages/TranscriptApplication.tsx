@@ -73,6 +73,10 @@ export function TranscriptApplication() {
       alert('Please agree to the terms and conditions');
       return;
     }
+    if (totalEnvelopes < 1) {
+      setSubmitError('Total envelopes must be at least 1');
+      return;
+    }
     if (!files.applicantId || !files.markSheet) {
       setSubmitError('Please upload applicant ID proof and mark sheet');
       return;
