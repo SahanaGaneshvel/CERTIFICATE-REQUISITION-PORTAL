@@ -34,8 +34,8 @@
 }
 
 .warning {
-  background: var(--warning-light);
-  color: var(--warning);
+  background: var(--gold-light);
+  color: var(--gold-dark);
 }
 
 .error {
@@ -44,16 +44,16 @@
 }
 
 .info {
-  background: var(--info-light);
-  color: var(--info);
+  background: var(--orange-light);
+  color: var(--orange-dark);
 }
 
 .orange {
-  background: rgba(245, 130, 31, 0.1);
-  color: var(--primary-orange);
+  background: var(--orange-light);
+  color: var(--orange-dark);
 }
 
 .green {
-  background: rgba(46, 125, 50, 0.1);
-  color: var(--primary-green);
+  background: var(--green-light);
+  color: var(--green-dark);
 }

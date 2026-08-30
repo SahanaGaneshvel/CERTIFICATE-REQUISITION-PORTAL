@@ -35,7 +35,7 @@ const quickActions = [
     title: 'Payment History',
     description: 'View your payment transactions',
     path: '/payment-history',
-    color: 'blue',
+    color: 'black',
   },
 ];
 
@@ -93,9 +93,9 @@ const getStatusBadge = (status: string) => {
     case 'completed':
       return <Badge variant="success">Completed</Badge>;
     case 'processing':
-      return <Badge variant="warning">Processing</Badge>;
+      return <Badge variant="orange">Processing</Badge>;
     case 'pending':
-      return <Badge variant="info">Pending</Badge>;
+      return <Badge variant="orange">Pending</Badge>;
     default:
       return <Badge>{status}</Badge>;
   }

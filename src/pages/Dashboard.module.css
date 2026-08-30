@@ -146,9 +146,10 @@
   color: var(--primary-green);
 }
 
-.actionIcon.blue {
-  background: rgba(59, 130, 246, 0.1);
-  color: var(--info);
+.actionIcon.blue,
+.actionIcon.black {
+  background: rgba(20, 20, 20, 0.06);
+  color: var(--action-black);
 }
 
 .actionTitle {
@@ -228,11 +229,11 @@
 }
 
 .statusIconWarning {
-  color: var(--warning);
+  color: var(--primary-orange);
 }
 
 .statusIconInfo {
-  color: var(--info);
+  color: var(--primary-orange);
 }
 
 /* Profile Grid */

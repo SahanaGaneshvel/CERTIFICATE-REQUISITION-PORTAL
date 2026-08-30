@@ -18,34 +18,9 @@
 }
 
 .logo {
-  width: 60px;
-  height: 60px;
+  height: 44px;
+  width: auto;
   object-fit: contain;
-}
-
-.brandText {
-  display: flex;
-  flex-direction: column;
-}
-
-.title {
-  font-size: var(--font-size-xl);
-  font-weight: 800;
-  color: var(--primary-dark);
-  margin: 0;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-size: var(--font-size-sm);
-  color: var(--gray-600);
-  margin: 0;
-}
-
-.university {
-  font-size: var(--font-size-xs);
-  color: var(--gray-500);
-  font-style: italic;
 }
 
 .portalTitle {
@@ -156,8 +131,8 @@
     padding: var(--spacing-sm) var(--spacing-md);
   }
 
-  .brandText {
-    display: none;
+  .logo {
+    height: 32px;
   }
 
   .userDetails {
