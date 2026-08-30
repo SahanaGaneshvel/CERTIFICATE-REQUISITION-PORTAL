@@ -1,0 +1,145 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--gray-700);
+}
+
+.required {
+  color: var(--error);
+  margin-left: 2px;
+}
+
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-2xl);
+  background: var(--gray-50);
+  border: 2px dashed var(--gray-300);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dropzone:hover {
+  background: var(--gray-100);
+  border-color: var(--primary-orange);
+}
+
+.dragActive {
+  background: var(--orange-lighter);
+  border-color: var(--primary-orange);
+  border-style: solid;
+}
+
+.hasError {
+  border-color: var(--error);
+}
+
+.input {
+  display: none;
+}
+
+.uploadIcon {
+  color: var(--gray-400);
+}
+
+.dropzoneText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.dropzoneTitle {
+  font-weight: 500;
+  color: var(--gray-700);
+}
+
+.dropzoneSubtitle {
+  font-size: var(--font-size-sm);
+  color: var(--gray-500);
+}
+
+.fileSelected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--success-light);
+  border: 1px solid var(--success);
+  border-radius: var(--radius-lg);
+}
+
+.fileInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.fileIcon {
+  color: var(--success);
+}
+
+.fileDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.fileName {
+  font-weight: 500;
+  color: var(--gray-800);
+  word-break: break-all;
+}
+
+.fileSize {
+  font-size: var(--font-size-sm);
+  color: var(--gray-500);
+}
+
+.fileActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.successIcon {
+  color: var(--success);
+}
+
+.removeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--gray-500);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.removeButton:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--error);
+}
+
+.error {
+  font-size: var(--font-size-sm);
+  color: var(--error);
+}
+
+.helperText {
+  font-size: var(--font-size-sm);
+  color: var(--gray-500);
+}

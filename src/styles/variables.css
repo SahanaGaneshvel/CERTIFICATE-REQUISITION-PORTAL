@@ -1,0 +1,111 @@
+:root {
+  /* ===== Hindustan University Brand Colors (sampled from official logo) ===== */
+  /* 1. ORANGE — primary brand color, highest visibility */
+  --primary-orange: #f6891f;
+  --secondary-orange: #ff9d40;
+  --orange-dark: #d9720f;
+  --orange-light: #fef0e2;
+  --orange-lighter: #fef7ef;
+
+  /* 2. GREEN — secondary/supporting institutional color */
+  --primary-green: #009d4e;
+  --secondary-green: #2eb872;
+  --green-dark: #007a3d;
+  --green-light: #e3f7ec;
+  --green-lighter: #f1fbf6;
+
+  /* 3. BLACK — action / strong contrast (CTAs) */
+  --primary-dark: #1a1a1a;
+  --action-black: #141414;
+  --action-black-hover: #2b2b2b;
+
+  /* 4. GOLD — sparing highlight/accent color */
+  --gold: #d4af37;
+  --gold-light: #f9f0d9;
+  --gold-dark: #a8842a;
+
+  /* Neutral Colors */
+  --white: #ffffff;
+  --black: #000000;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+
+  /* Status Colors (kept semantically distinct from brand colors) */
+  --success: var(--primary-green);
+  --success-light: var(--green-light);
+  --warning: var(--gold-dark);
+  --warning-light: var(--gold-light);
+  --error: #d92d20;
+  --error-light: #fbe4e1;
+  --info: var(--primary-orange);
+  --info-light: var(--orange-light);
+
+  /* Gradients — brand-only, no unrelated hues */
+  --gradient-primary: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+  --gradient-dark: linear-gradient(135deg, var(--action-black) 0%, #262626 100%);
+  --gradient-hero: linear-gradient(135deg, var(--action-black) 0%, #262626 55%, var(--green-dark) 100%);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-glow-orange: 0 0 40px rgba(246, 137, 31, 0.28);
+  --shadow-glow-green: 0 0 40px rgba(0, 157, 78, 0.28);
+
+  /* Focus ring — brand orange, accessible */
+  --focus-ring: 0 0 0 3px rgba(246, 137, 31, 0.35);
+
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Typography */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 350ms ease;
+
+  /* Z-index */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+}

@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum CollectionMode {
+  APPLICANT_IN_PERSON
+  APPLICANT_BY_POST
+  AUTHORIZED_IN_PERSON
+  AUTHORIZED_BY_POST
+}
+
+enum RequestStatus {
+  PENDING
+  APPLIED
+  PROCESSING
+  READY
+  COLLECTED
+  REJECTED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum CertificateRequestStatus {
+  PENDING
+  GENERATED
+  DOWNLOADED
+  REJECTED
+}
+
+model User {
+  id              String   @id @default(uuid())
+  registerNo      String   @unique
+  passwordHash    String
+  name            String
+  dateOfBirth     String
+  degree          String
+  branch          String
+  campus          String
+  gender          String
+  admittedYear    Int
+  institution     String
+  mobileNumber    String   @default("")
+  alternateMobile String?
+  email           String   @default("")
+  alternateEmail  String?
+  isRegistered    Boolean  @default(false)
+  role            Role     @default(STUDENT)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  transcriptApplications TranscriptApplication[]
+  certificateRequests    CertificateRequest[]
+  payments               Payment[]
+  auditLogs               AuditLog[]
+}
+
+model TranscriptApplication {
+  id                String         @id @default(uuid())
+  referenceNumber   String         @unique
+  student           User           @relation(fields: [studentId], references: [id])
+  studentId         String
+  numberOfSets      Int
+  notSealed         Int
+  sealed            Int
+  totalEnvelopes    Int
+  collectionMode    CollectionMode
+  authorizedName        String?
+  authorizedRelationship String?
+  authorizedAddress    String?
+  authorizedMobile    String?
+  applicantIdProofKey    String?
+  markSheetKey           String?
+  authorizedIdProofKey   String?
+  authorizationLetterKey String?
+  generatedCertificateKey String?
+  feeAmount         Float
+  status            RequestStatus  @default(PENDING)
+  appliedDate       DateTime       @default(now())
+  paymentStatus     PaymentStatus  @default(PENDING)
+  payment           Payment?
+  reviewedBy        String?
+  reviewNote        String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+}
+
+model CertificateRequest {
+  id              String                   @id @default(uuid())
+  student         User                     @relation(fields: [studentId], references: [id])
+  studentId       String
+  certificateType String
+  purpose         String
+  status          CertificateRequestStatus @default(PENDING)
+  feeAmount       Float                    @default(0)
+  paymentStatus   PaymentStatus            @default(PENDING)
+  generatedCertificateKey String?
+  payment         Payment?
+  requestDate     DateTime                 @default(now())
+  reviewedBy      String?
+  reviewNote      String?
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  srmTransId    String        @unique
+  pgTransId     String?
+  student       User          @relation(fields: [studentId], references: [id])
+  studentId     String
+  feeType       String
+  amount        Float
+  status        PaymentStatus @default(PENDING)
+  dateTime      DateTime      @default(now())
+
+  transcriptApplication   TranscriptApplication? @relation(fields: [transcriptApplicationId], references: [id])
+  transcriptApplicationId String?                 @unique
+  certificateRequest      CertificateRequest?     @relation(fields: [certificateRequestId], references: [id])
+  certificateRequestId    String?                 @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  actor     User     @relation(fields: [actorId], references: [id])
+  actorId   String
+  action    String
+  entity    String
+  entityId  String
+  detail    String?
+  createdAt DateTime @default(now())
+}
