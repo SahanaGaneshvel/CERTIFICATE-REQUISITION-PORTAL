@@ -85,17 +85,28 @@ export function ApplicationStatus() {
   }, []);
 
   const getStatusBadge = (status: string) => {
+<<<<<<< HEAD
     const map: Record<string, { variant: 'success' | 'orange' | 'error'; label: string }> = {
       PENDING: { variant: 'orange', label: 'Pending' },
       APPLIED: { variant: 'orange', label: 'Applied' },
       PROCESSING: { variant: 'orange', label: 'Processing' },
+=======
+    const map: Record<string, { variant: 'success' | 'warning' | 'error' | 'info'; label: string }> = {
+      PENDING: { variant: 'info', label: 'Pending' },
+      APPLIED: { variant: 'warning', label: 'Applied' },
+      PROCESSING: { variant: 'warning', label: 'Processing' },
+>>>>>>> origin/feature/backend-docker-stack
       READY: { variant: 'success', label: 'Ready' },
       COLLECTED: { variant: 'success', label: 'Collected' },
       GENERATED: { variant: 'success', label: 'Generated' },
       DOWNLOADED: { variant: 'success', label: 'Downloaded' },
       REJECTED: { variant: 'error', label: 'Rejected' },
     };
+<<<<<<< HEAD
     const c = map[status] || { variant: 'orange' as const, label: status };
+=======
+    const c = map[status] || { variant: 'info' as const, label: status };
+>>>>>>> origin/feature/backend-docker-stack
     return <Badge variant={c.variant}>{c.label}</Badge>;
   };
 
@@ -149,35 +160,58 @@ export function ApplicationStatus() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
+<<<<<<< HEAD
         <p className={styles.eyebrow}>Applications</p>
+=======
+>>>>>>> origin/feature/backend-docker-stack
         <h1 className={styles.title}>Application Status</h1>
         <p className={styles.subtitle}>Track all your transcript and certificate requests</p>
       </div>
 
       <div className={styles.statsGrid}>
+<<<<<<< HEAD
         <Card variant="default" padding="md" className={styles.statCard}>
           <div className={`${styles.statIcon} ${styles.totalBg}`}><FileText size={20} /></div>
+=======
+        <Card variant="elevated" padding="md" className={styles.statCard}>
+          <div className={`${styles.statIcon} ${styles.totalBg}`}><FileText size={24} /></div>
+>>>>>>> origin/feature/backend-docker-stack
           <div className={styles.statContent}>
             <span className={styles.statValue}>{total}</span>
             <span className={styles.statLabel}>Total</span>
           </div>
         </Card>
+<<<<<<< HEAD
         <Card variant="default" padding="md" className={styles.statCard}>
           <div className={`${styles.statIcon} ${styles.pendingBg}`}><AlertCircle size={20} /></div>
+=======
+        <Card variant="elevated" padding="md" className={styles.statCard}>
+          <div className={`${styles.statIcon} ${styles.pendingBg}`}><AlertCircle size={24} /></div>
+>>>>>>> origin/feature/backend-docker-stack
           <div className={styles.statContent}>
             <span className={styles.statValue}>{pending}</span>
             <span className={styles.statLabel}>Pending</span>
           </div>
         </Card>
+<<<<<<< HEAD
         <Card variant="default" padding="md" className={styles.statCard}>
           <div className={`${styles.statIcon} ${styles.processingBg}`}><Clock size={20} /></div>
+=======
+        <Card variant="elevated" padding="md" className={styles.statCard}>
+          <div className={`${styles.statIcon} ${styles.processingBg}`}><Clock size={24} /></div>
+>>>>>>> origin/feature/backend-docker-stack
           <div className={styles.statContent}>
             <span className={styles.statValue}>{processing}</span>
             <span className={styles.statLabel}>Processing</span>
           </div>
         </Card>
+<<<<<<< HEAD
         <Card variant="default" padding="md" className={styles.statCard}>
           <div className={`${styles.statIcon} ${styles.completedBg}`}><CheckCircle size={20} /></div>
+=======
+        <Card variant="elevated" padding="md" className={styles.statCard}>
+          <div className={`${styles.statIcon} ${styles.completedBg}`}><CheckCircle size={24} /></div>
+>>>>>>> origin/feature/backend-docker-stack
           <div className={styles.statContent}>
             <span className={styles.statValue}>{completed}</span>
             <span className={styles.statLabel}>Completed</span>
@@ -187,6 +221,7 @@ export function ApplicationStatus() {
 
       <div className={styles.quickActions}>
         <Link to="/transcript" className={styles.quickAction}>
+<<<<<<< HEAD
           <FileText size={18} /><span>New Transcript Request</span><ArrowRight size={14} />
         </Link>
         <Link to="/certificates" className={styles.quickAction}>
@@ -195,6 +230,16 @@ export function ApplicationStatus() {
       </div>
 
       <Card variant="default" padding="lg">
+=======
+          <FileText size={20} /><span>New Transcript Request</span><ArrowRight size={16} />
+        </Link>
+        <Link to="/certificates" className={styles.quickAction}>
+          <Award size={20} /><span>New Certificate Request</span><ArrowRight size={16} />
+        </Link>
+      </div>
+
+      <Card variant="elevated" padding="lg">
+>>>>>>> origin/feature/backend-docker-stack
         <CardHeader>
           <div className={styles.tableHeader}>
             <CardTitle>All Applications</CardTitle>
@@ -338,4 +383,8 @@ export function ApplicationStatus() {
       </Card>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/feature/backend-docker-stack

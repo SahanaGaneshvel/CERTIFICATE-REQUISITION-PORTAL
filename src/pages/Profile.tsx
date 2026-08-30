@@ -43,19 +43,31 @@ export function Profile() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
+<<<<<<< HEAD
         <div>
           <p className={styles.eyebrow}>Account</p>
           <h1 className={styles.title}>Profile</h1>
         </div>
+=======
+        <h1 className={styles.title}>Profile</h1>
+>>>>>>> origin/feature/backend-docker-stack
         <Badge variant="green">Verified Student</Badge>
       </div>
 
       {/* Profile Card */}
+<<<<<<< HEAD
       <Card variant="default" padding="lg" className={styles.profileCard}>
         <div className={styles.profileHeader}>
           <div className={styles.avatarSection}>
             <div className={styles.avatar}>
               <User size={40} />
+=======
+      <Card variant="gradient" padding="lg" className={styles.profileCard}>
+        <div className={styles.profileHeader}>
+          <div className={styles.avatarSection}>
+            <div className={styles.avatar}>
+              <User size={48} />
+>>>>>>> origin/feature/backend-docker-stack
             </div>
             <div className={styles.avatarInfo}>
               <h2 className={styles.profileName}>{user?.name}</h2>
@@ -75,7 +87,11 @@ export function Profile() {
       {/* Profile Sections */}
       <div className={styles.sectionsGrid}>
         {profileSections.map((section) => (
+<<<<<<< HEAD
           <Card key={section.title} variant="default" padding="lg">
+=======
+          <Card key={section.title} variant="elevated" padding="lg">
+>>>>>>> origin/feature/backend-docker-stack
             <CardHeader>
               <div className={styles.sectionHeader}>
                 <div className={styles.sectionIcon}>{section.icon}</div>
@@ -100,4 +116,8 @@ export function Profile() {
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/feature/backend-docker-stack

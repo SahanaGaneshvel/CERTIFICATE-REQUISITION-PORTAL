@@ -25,9 +25,13 @@ export function Header({ onLogout }: HeaderProps) {
       </div>
 
       <div className={styles.portalTitle}>
+<<<<<<< HEAD
         <h2>
           Certificate Requisition <span>Portal</span>
         </h2>
+=======
+        <h2>CERTIFICATE REQUISITION PORTAL</h2>
+>>>>>>> origin/feature/backend-docker-stack
       </div>
 
       <div className={styles.actions}>
@@ -50,4 +54,8 @@ export function Header({ onLogout }: HeaderProps) {
       </div>
     </header>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/feature/backend-docker-stack

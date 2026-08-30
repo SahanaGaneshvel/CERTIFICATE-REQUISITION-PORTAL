@@ -2,12 +2,17 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xl);
+<<<<<<< HEAD
   max-width: 1280px;
+=======
+  max-width: 1200px;
+>>>>>>> origin/feature/backend-docker-stack
   margin: 0 auto;
 }
 
 .header {
   display: flex;
+<<<<<<< HEAD
   flex-direction: column;
   gap: 2px;
 }
@@ -19,6 +24,10 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin: 0;
+=======
+  align-items: center;
+  justify-content: space-between;
+>>>>>>> origin/feature/backend-docker-stack
 }
 
 .title {
@@ -32,20 +41,29 @@
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+<<<<<<< HEAD
   gap: var(--spacing-md);
+=======
+  gap: var(--spacing-lg);
+>>>>>>> origin/feature/backend-docker-stack
 }
 
 .statCard {
   display: flex;
   align-items: center;
+<<<<<<< HEAD
   gap: var(--spacing-md);
   border: 1px solid var(--gray-100);
+=======
+  gap: var(--spacing-lg);
+>>>>>>> origin/feature/backend-docker-stack
 }
 
 .statIcon {
   display: flex;
   align-items: center;
   justify-content: center;
+<<<<<<< HEAD
   width: 44px;
   height: 44px;
   border-radius: var(--radius-md);
@@ -65,6 +83,24 @@
 .pendingBg {
   background: var(--orange-light);
   color: var(--orange-dark);
+=======
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  color: var(--white);
+}
+
+.successBg {
+  background: var(--success);
+}
+
+.failedBg {
+  background: var(--error);
+}
+
+.pendingBg {
+  background: var(--warning);
+>>>>>>> origin/feature/backend-docker-stack
 }
 
 .statContent {
@@ -76,7 +112,10 @@
   font-size: var(--font-size-2xl);
   font-weight: 700;
   color: var(--gray-900);
+<<<<<<< HEAD
   line-height: 1.2;
+=======
+>>>>>>> origin/feature/backend-docker-stack
 }
 
 .statLabel {
@@ -90,8 +129,11 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+<<<<<<< HEAD
   flex-wrap: wrap;
   gap: var(--spacing-md);
+=======
+>>>>>>> origin/feature/backend-docker-stack
 }
 
 .tableActions {
@@ -102,8 +144,11 @@
 /* Table */
 .tableWrapper {
   overflow-x: auto;
+<<<<<<< HEAD
   border: 1px solid var(--gray-100);
   border-radius: var(--radius-md);
+=======
+>>>>>>> origin/feature/backend-docker-stack
 }
 
 .table {
@@ -121,11 +166,16 @@
 }
 
 .table th {
+<<<<<<< HEAD
   font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--gray-500);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+=======
+  font-weight: 600;
+  color: var(--gray-600);
+>>>>>>> origin/feature/backend-docker-stack
   background: var(--gray-50);
 }
 
@@ -133,14 +183,18 @@
   color: var(--gray-700);
 }
 
+<<<<<<< HEAD
 .table tbody tr:last-child td {
   border-bottom: none;
 }
 
+=======
+>>>>>>> origin/feature/backend-docker-stack
 .table tbody tr:hover {
   background: var(--gray-50);
 }
 
+<<<<<<< HEAD
 .emptyRow {
   text-align: center;
   color: var(--gray-500);
@@ -148,15 +202,22 @@
   white-space: normal !important;
 }
 
+=======
+>>>>>>> origin/feature/backend-docker-stack
 .studentId {
   font-weight: 600;
   color: var(--gray-900);
 }
 
 .transId {
+<<<<<<< HEAD
   font-family: 'SFMono-Regular', Consolas, monospace;
   font-size: var(--font-size-xs);
   color: var(--gray-600);
+=======
+  font-family: monospace;
+  font-size: var(--font-size-xs);
+>>>>>>> origin/feature/backend-docker-stack
 }
 
 .amount {
@@ -179,7 +240,11 @@
 }
 
 .pendingIcon {
+<<<<<<< HEAD
   color: var(--primary-orange);
+=======
+  color: var(--warning);
+>>>>>>> origin/feature/backend-docker-stack
 }
 
 @media (max-width: 768px) {
@@ -192,4 +257,8 @@
     align-items: flex-start;
     gap: var(--spacing-md);
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/feature/backend-docker-stack

@@ -1,6 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   gap: var(--spacing-xl);
   max-width: 1280px;
   margin: 0 auto;
@@ -134,6 +135,82 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
+=======
+  gap: var(--spacing-2xl);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Welcome Section */
+.welcomeSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-2xl);
+  background: var(--gradient-hero);
+  border-radius: var(--radius-2xl);
+  color: var(--white);
+  box-shadow: var(--shadow-lg);
+}
+
+.welcomeContent {
+  flex: 1;
+}
+
+.welcomeTitle {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  margin: 0 0 var(--spacing-sm);
+}
+
+.welcomeTitle span {
+  color: var(--primary-orange);
+}
+
+.welcomeSubtitle {
+  font-size: var(--font-size-lg);
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.welcomeStats {
+  display: flex;
+  gap: var(--spacing-xl);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-lg);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(10px);
+  min-width: 100px;
+}
+
+.stat svg {
+  color: var(--primary-orange);
+}
+
+.statValue {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+}
+
+.statLabel {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+/* Section */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+>>>>>>> origin/feature/backend-docker-stack
 }
 
 .sectionHeader {
@@ -143,7 +220,11 @@
 }
 
 .sectionTitle {
+<<<<<<< HEAD
   font-size: var(--font-size-md);
+=======
+  font-size: var(--font-size-xl);
+>>>>>>> origin/feature/backend-docker-stack
   font-weight: 600;
   color: var(--gray-900);
   margin: 0;
@@ -152,16 +233,95 @@
 .viewAllLink {
   display: flex;
   align-items: center;
+<<<<<<< HEAD
   gap: 4px;
   font-size: var(--font-size-sm);
   font-weight: 600;
+=======
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+>>>>>>> origin/feature/backend-docker-stack
   color: var(--primary-orange);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
 .viewAllLink:hover {
+<<<<<<< HEAD
   color: var(--orange-dark);
+=======
+  color: var(--secondary-orange);
+}
+
+/* Actions Grid */
+.actionsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.actionCard {
+  text-decoration: none;
+}
+
+.actionCardInner {
+  height: 100%;
+  transition: all var(--transition-normal);
+}
+
+.actionCardInner:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+.actionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.actionIcon.orange {
+  background: rgba(245, 130, 31, 0.1);
+  color: var(--primary-orange);
+}
+
+.actionIcon.green {
+  background: rgba(46, 125, 50, 0.1);
+  color: var(--primary-green);
+}
+
+.actionIcon.blue,
+.actionIcon.black {
+  background: rgba(20, 20, 20, 0.06);
+  color: var(--action-black);
+}
+
+.actionTitle {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--gray-900);
+  margin: 0 0 var(--spacing-sm);
+}
+
+.actionDescription {
+  font-size: var(--font-size-sm);
+  color: var(--gray-500);
+  margin: 0 0 var(--spacing-md);
+}
+
+.actionLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--primary-orange);
+>>>>>>> origin/feature/backend-docker-stack
 }
 
 /* Table */
@@ -181,6 +341,7 @@
 }
 
 .table th {
+<<<<<<< HEAD
   font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--gray-500);
@@ -188,6 +349,13 @@
   letter-spacing: 0.04em;
   background: var(--gray-50);
   border-bottom: 1px solid var(--gray-200);
+=======
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--gray-600);
+  background: var(--gray-50);
+  border-bottom: 2px solid var(--gray-200);
+>>>>>>> origin/feature/backend-docker-stack
 }
 
 .table td {
@@ -196,14 +364,18 @@
   border-bottom: 1px solid var(--gray-100);
 }
 
+<<<<<<< HEAD
 .table tbody tr:last-child td {
   border-bottom: none;
 }
 
+=======
+>>>>>>> origin/feature/backend-docker-stack
 .table tbody tr:hover {
   background: var(--gray-50);
 }
 
+<<<<<<< HEAD
 .emptyState {
   text-align: center;
   color: var(--gray-500);
@@ -222,6 +394,8 @@
   to { transform: rotate(360deg); }
 }
 
+=======
+>>>>>>> origin/feature/backend-docker-stack
 .referenceNo {
   font-weight: 600;
   color: var(--gray-900);
@@ -232,6 +406,7 @@
   color: var(--gray-800);
 }
 
+<<<<<<< HEAD
 /* Quick Actions (sidebar list) */
 .actionsList {
   display: flex;
@@ -309,6 +484,24 @@
 .actionArrow {
   color: var(--gray-300);
   flex-shrink: 0;
+=======
+.statusCell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.statusIconSuccess {
+  color: var(--success);
+}
+
+.statusIconWarning {
+  color: var(--primary-orange);
+}
+
+.statusIconInfo {
+  color: var(--primary-orange);
+>>>>>>> origin/feature/backend-docker-stack
 }
 
 /* Profile Grid */
@@ -321,6 +514,7 @@
 .profileItem {
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   gap: 4px;
 }
 
@@ -333,17 +527,40 @@
 
 .profileValue {
   font-size: var(--font-size-sm);
+=======
+  gap: var(--spacing-xs);
+}
+
+.profileLabel {
+  font-size: var(--font-size-sm);
+  color: var(--gray-500);
+}
+
+.profileValue {
+  font-size: var(--font-size-md);
+>>>>>>> origin/feature/backend-docker-stack
   font-weight: 600;
   color: var(--gray-800);
 }
 
 @media (max-width: 1024px) {
+<<<<<<< HEAD
   .kpiGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 
   .mainGrid {
     grid-template-columns: 1fr;
+=======
+  .welcomeSection {
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    text-align: center;
+  }
+
+  .actionsGrid {
+    grid-template-columns: repeat(2, 1fr);
+>>>>>>> origin/feature/backend-docker-stack
   }
 
   .profileGrid {
@@ -352,6 +569,7 @@
 }
 
 @media (max-width: 640px) {
+<<<<<<< HEAD
   .pageHeader {
     flex-direction: column;
     align-items: flex-start;
@@ -364,6 +582,21 @@
 
   .kpiGrid {
     grid-template-columns: 1fr 1fr;
+=======
+  .welcomeStats {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .stat {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .actionsGrid {
+    grid-template-columns: 1fr;
+>>>>>>> origin/feature/backend-docker-stack
   }
 
   .profileGrid {

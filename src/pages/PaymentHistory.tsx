@@ -67,7 +67,11 @@ export function PaymentHistory() {
       case 'failed':
         return <Badge variant="error">Failed - Marked bounced as transaction</Badge>;
       case 'pending':
+<<<<<<< HEAD
         return <Badge variant="orange">Initiated and Not Completed</Badge>;
+=======
+        return <Badge variant="warning">Initiated and Not Completed</Badge>;
+>>>>>>> origin/feature/backend-docker-stack
       default:
         return <Badge>{status}</Badge>;
     }
@@ -93,33 +97,54 @@ export function PaymentHistory() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
+<<<<<<< HEAD
         <p className={styles.eyebrow}>Payments</p>
+=======
+>>>>>>> origin/feature/backend-docker-stack
         <h1 className={styles.title}>Payment Transaction Log</h1>
       </div>
 
       {/* Stats */}
       <div className={styles.statsGrid}>
+<<<<<<< HEAD
         <Card variant="default" padding="md" className={styles.statCard}>
           <div className={styles.statIcon + ' ' + styles.successBg}>
             <CheckCircle size={20} />
+=======
+        <Card variant="elevated" padding="md" className={styles.statCard}>
+          <div className={styles.statIcon + ' ' + styles.successBg}>
+            <CheckCircle size={24} />
+>>>>>>> origin/feature/backend-docker-stack
           </div>
           <div className={styles.statContent}>
             <span className={styles.statValue}>{totalSuccess}</span>
             <span className={styles.statLabel}>Successful</span>
           </div>
         </Card>
+<<<<<<< HEAD
         <Card variant="default" padding="md" className={styles.statCard}>
           <div className={styles.statIcon + ' ' + styles.failedBg}>
             <XCircle size={20} />
+=======
+        <Card variant="elevated" padding="md" className={styles.statCard}>
+          <div className={styles.statIcon + ' ' + styles.failedBg}>
+            <XCircle size={24} />
+>>>>>>> origin/feature/backend-docker-stack
           </div>
           <div className={styles.statContent}>
             <span className={styles.statValue}>{totalFailed}</span>
             <span className={styles.statLabel}>Failed</span>
           </div>
         </Card>
+<<<<<<< HEAD
         <Card variant="default" padding="md" className={styles.statCard}>
           <div className={styles.statIcon + ' ' + styles.pendingBg}>
             <Clock size={20} />
+=======
+        <Card variant="elevated" padding="md" className={styles.statCard}>
+          <div className={styles.statIcon + ' ' + styles.pendingBg}>
+            <Clock size={24} />
+>>>>>>> origin/feature/backend-docker-stack
           </div>
           <div className={styles.statContent}>
             <span className={styles.statValue}>{totalPending}</span>
@@ -129,7 +154,11 @@ export function PaymentHistory() {
       </div>
 
       {/* Transaction Table */}
+<<<<<<< HEAD
       <Card variant="default" padding="lg">
+=======
+      <Card variant="elevated" padding="lg">
+>>>>>>> origin/feature/backend-docker-stack
         <CardHeader>
           <div className={styles.tableHeader}>
             <CardTitle>Transaction History</CardTitle>
@@ -158,12 +187,20 @@ export function PaymentHistory() {
               <tbody>
                 {isLoading && (
                   <tr>
+<<<<<<< HEAD
                     <td colSpan={6} className={styles.emptyRow}>Loading...</td>
+=======
+                    <td colSpan={5}>Loading...</td>
+>>>>>>> origin/feature/backend-docker-stack
                   </tr>
                 )}
                 {!isLoading && filteredTransactions.length === 0 && (
                   <tr>
+<<<<<<< HEAD
                     <td colSpan={6} className={styles.emptyRow}>No transactions yet</td>
+=======
+                    <td colSpan={5}>No transactions yet</td>
+>>>>>>> origin/feature/backend-docker-stack
                   </tr>
                 )}
                 {filteredTransactions.map((transaction) => (
@@ -188,4 +225,8 @@ export function PaymentHistory() {
       </Card>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/feature/backend-docker-stack
