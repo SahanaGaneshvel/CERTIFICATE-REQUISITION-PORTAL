@@ -17,36 +17,40 @@ export function Header({ onLogout }: HeaderProps) {
           alt="Hindustan Institute of Technology & Science"
           className={styles.logo}
         />
+
         <div className={styles.brandText}>
           <h1 className={styles.title}>HINDUSTAN</h1>
-          <p className={styles.subtitle}>Institute of Technology & Science</p>
-          <span className={styles.university}>(Deemed to be University)</span>
+          <p className={styles.subtitle}>
+            Institute of Technology & Science
+          </p>
+          <span className={styles.university}>
+            (Deemed to be University)
+          </span>
         </div>
       </div>
 
       <div className={styles.portalTitle}>
-<<<<<<< HEAD
         <h2>
           Certificate Requisition <span>Portal</span>
         </h2>
-=======
-        <h2>CERTIFICATE REQUISITION PORTAL</h2>
->>>>>>> origin/feature/backend-docker-stack
       </div>
 
       <div className={styles.actions}>
         <button className={styles.iconButton}>
           <Bell size={20} />
         </button>
+
         <div className={styles.userInfo}>
           <div className={styles.avatar}>
             <User size={20} />
           </div>
+
           <div className={styles.userDetails}>
             <span className={styles.userName}>{user?.name}</span>
             <span className={styles.userId}>{user?.registerNo}</span>
           </div>
         </div>
+
         <button className={styles.logoutButton} onClick={onLogout}>
           <LogOut size={18} />
           <span>Logout</span>
@@ -54,8 +58,4 @@ export function Header({ onLogout }: HeaderProps) {
       </div>
     </header>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/feature/backend-docker-stack

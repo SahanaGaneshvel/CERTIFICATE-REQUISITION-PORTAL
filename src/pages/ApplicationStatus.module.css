@@ -2,18 +2,13 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xl);
-<<<<<<< HEAD
   max-width: 1280px;
-=======
-  max-width: 1200px;
->>>>>>> origin/feature/backend-docker-stack
   margin: 0 auto;
 }
 
 .header {
   display: flex;
   flex-direction: column;
-<<<<<<< HEAD
   gap: 2px;
 }
 
@@ -24,9 +19,6 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin: 0;
-=======
-  gap: var(--spacing-xs);
->>>>>>> origin/feature/backend-docker-stack
 }
 
 .title {
@@ -43,32 +35,24 @@
 }
 
 /* Stats Grid */
+
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-<<<<<<< HEAD
   gap: var(--spacing-md);
-=======
-  gap: var(--spacing-lg);
->>>>>>> origin/feature/backend-docker-stack
 }
 
 .statCard {
   display: flex;
   align-items: center;
-<<<<<<< HEAD
   gap: var(--spacing-md);
   border: 1px solid var(--gray-100);
-=======
-  gap: var(--spacing-lg);
->>>>>>> origin/feature/backend-docker-stack
 }
 
 .statIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-<<<<<<< HEAD
   width: 44px;
   height: 44px;
   border-radius: var(--radius-md);
@@ -93,28 +77,6 @@
 .completedBg {
   background: var(--green-light);
   color: var(--green-dark);
-=======
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-lg);
-  color: var(--white);
-}
-
-.totalBg {
-  background: var(--primary-orange);
-}
-
-.pendingBg {
-  background: var(--info);
-}
-
-.processingBg {
-  background: var(--warning);
-}
-
-.completedBg {
-  background: var(--success);
->>>>>>> origin/feature/backend-docker-stack
 }
 
 .statContent {
@@ -126,10 +88,7 @@
   font-size: var(--font-size-2xl);
   font-weight: 700;
   color: var(--gray-900);
-<<<<<<< HEAD
   line-height: 1.2;
-=======
->>>>>>> origin/feature/backend-docker-stack
 }
 
 .statLabel {
@@ -138,20 +97,16 @@
 }
 
 /* Quick Actions */
+
 .quickActions {
   display: flex;
-<<<<<<< HEAD
   gap: var(--spacing-md);
   flex-wrap: wrap;
-=======
-  gap: var(--spacing-lg);
->>>>>>> origin/feature/backend-docker-stack
 }
 
 .quickAction {
   display: flex;
   align-items: center;
-<<<<<<< HEAD
   gap: var(--spacing-sm);
   padding: 10px var(--spacing-lg);
   background: var(--white);
@@ -160,7 +115,8 @@
   color: var(--gray-700);
   font-size: var(--font-size-sm);
   text-decoration: none;
-  transition: border-color var(--transition-fast), color var(--transition-fast);
+  transition: border-color var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .quickAction:hover {
@@ -170,39 +126,17 @@
 
 .quickAction span {
   font-weight: 600;
-=======
-  gap: var(--spacing-md);
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--white);
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius-lg);
-  color: var(--gray-700);
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.quickAction:hover {
-  background: var(--gray-50);
-  border-color: var(--primary-orange);
-  color: var(--primary-orange);
-}
-
-.quickAction span {
-  font-weight: 500;
->>>>>>> origin/feature/backend-docker-stack
 }
 
 /* Table Header */
+
 .tableHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-<<<<<<< HEAD
   flex-wrap: wrap;
   gap: var(--spacing-md);
-=======
->>>>>>> origin/feature/backend-docker-stack
 }
 
 .filters {
@@ -211,44 +145,33 @@
 }
 
 /* Sections */
+
 .section {
   margin-bottom: var(--spacing-xl);
 }
 
-<<<<<<< HEAD
 .section:last-child {
   margin-bottom: 0;
 }
 
-=======
->>>>>>> origin/feature/backend-docker-stack
 .sectionTitle {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-<<<<<<< HEAD
   font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--gray-600);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin: 0 0 var(--spacing-md);
-=======
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--gray-800);
-  margin-bottom: var(--spacing-md);
->>>>>>> origin/feature/backend-docker-stack
 }
 
 /* Table */
+
 .tableWrapper {
   overflow-x: auto;
-<<<<<<< HEAD
   border: 1px solid var(--gray-100);
   border-radius: var(--radius-md);
-=======
->>>>>>> origin/feature/backend-docker-stack
 }
 
 .table {
@@ -266,16 +189,11 @@
 }
 
 .table th {
-<<<<<<< HEAD
   font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--gray-500);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-=======
-  font-weight: 600;
-  color: var(--gray-600);
->>>>>>> origin/feature/backend-docker-stack
   background: var(--gray-50);
 }
 
@@ -283,18 +201,16 @@
   color: var(--gray-700);
 }
 
-<<<<<<< HEAD
 .table tbody tr:last-child td {
   border-bottom: none;
 }
 
-=======
->>>>>>> origin/feature/backend-docker-stack
 .table tbody tr:hover {
   background: var(--gray-50);
 }
 
-.refNo, .certType {
+.refNo,
+.certType {
   font-weight: 600;
   color: var(--gray-900);
 }
@@ -319,19 +235,11 @@
 }
 
 .iconWarning {
-<<<<<<< HEAD
   color: var(--primary-orange);
 }
 
 .iconInfo {
   color: var(--primary-orange);
-=======
-  color: var(--warning);
-}
-
-.iconInfo {
-  color: var(--info);
->>>>>>> origin/feature/backend-docker-stack
 }
 
 .actions {
@@ -340,6 +248,7 @@
 }
 
 /* Empty State */
+
 .emptyState {
   display: flex;
   flex-direction: column;
@@ -347,11 +256,7 @@
   justify-content: center;
   padding: var(--spacing-3xl);
   text-align: center;
-<<<<<<< HEAD
   color: var(--gray-300);
-=======
-  color: var(--gray-400);
->>>>>>> origin/feature/backend-docker-stack
 }
 
 .emptyState h3 {
@@ -390,7 +295,6 @@
   .tableHeader {
     flex-direction: column;
     align-items: flex-start;
-<<<<<<< HEAD
   }
 
   .filters {
@@ -399,16 +303,9 @@
 
   .filters > * {
     flex: 1;
-=======
-    gap: var(--spacing-md);
->>>>>>> origin/feature/backend-docker-stack
   }
 
   .quickActions {
     flex-direction: column;
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/feature/backend-docker-stack
