@@ -86,13 +86,21 @@ adminRouter.post('/certificate-requests/:id/upload-certificate', upload.single('
 // Aggregate view for the admin analytics dashboard: how many certificates/transcripts
 // have been issued, broken down by type and by status. Grouped in the DB rather than
 // pulled row-by-row since this only needs counts, not the underlying records.
+const TREND_DAYS = 7;
+
 adminRouter.get('/analytics', asyncHandler(async (_req, res) => {
+  const trendStart = new Date();
+  trendStart.setDate(trendStart.getDate() - (TREND_DAYS - 1));
+  trendStart.setHours(0, 0, 0, 0);
+
   const [
     certByType,
     certByStatus,
     transcriptByStatus,
     totalCertificates,
     totalTranscripts,
+    recentCertificates,
+    recentTranscripts,
   ] = await Promise.all([
     prisma.certificateRequest.groupBy({
       by: ['certificateType'],
@@ -108,6 +116,14 @@ adminRouter.get('/analytics', asyncHandler(async (_req, res) => {
     }),
     prisma.certificateRequest.count(),
     prisma.transcriptApplication.count(),
+    prisma.certificateRequest.findMany({
+      where: { requestDate: { gte: trendStart } },
+      select: { requestDate: true },
+    }),
+    prisma.transcriptApplication.findMany({
+      where: { appliedDate: { gte: trendStart } },
+      select: { appliedDate: true },
+    }),
   ]);
 
   const certificatesIssued = certByStatus
@@ -116,6 +132,26 @@ adminRouter.get('/analytics', asyncHandler(async (_req, res) => {
   const transcriptsIssued = transcriptByStatus
     .filter((t) => t.status === 'READY' || t.status === 'COLLECTED')
     .reduce((sum, t) => sum + t._count._all, 0);
+
+  // Build a fixed 7-day day-key series so days with zero requests still appear as 0,
+  // rather than being silently absent from the chart.
+  const dayKey = (d: Date) => d.toISOString().slice(0, 10);
+  const days: string[] = [];
+  for (let i = 0; i < TREND_DAYS; i++) {
+    const d = new Date(trendStart);
+    d.setDate(d.getDate() + i);
+    days.push(dayKey(d));
+  }
+  const certCounts = new Map(days.map((d) => [d, 0]));
+  const transcriptCounts = new Map(days.map((d) => [d, 0]));
+  for (const c of recentCertificates) {
+    const key = dayKey(c.requestDate);
+    if (certCounts.has(key)) certCounts.set(key, certCounts.get(key)! + 1);
+  }
+  for (const t of recentTranscripts) {
+    const key = dayKey(t.appliedDate);
+    if (transcriptCounts.has(key)) transcriptCounts.set(key, transcriptCounts.get(key)! + 1);
+  }
 
   res.json({
     totals: {
@@ -129,6 +165,11 @@ adminRouter.get('/analytics', asyncHandler(async (_req, res) => {
       .sort((a, b) => b.count - a.count),
     certificatesByStatus: certByStatus.map((c) => ({ status: c.status, count: c._count._all })),
     transcriptsByStatus: transcriptByStatus.map((t) => ({ status: t.status, count: t._count._all })),
+    trend: days.map((d) => ({
+      date: d,
+      certificates: certCounts.get(d) ?? 0,
+      transcripts: transcriptCounts.get(d) ?? 0,
+    })),
   });
 }));
 

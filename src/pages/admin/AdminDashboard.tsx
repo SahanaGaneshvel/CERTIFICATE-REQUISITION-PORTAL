@@ -1,10 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FileText, Award, Clock, CheckCircle, ArrowRight, TrendingUp, BarChart3 } from 'lucide-react';
+import {
+  FileText,
+  Award,
+  BarChart3,
+  Clock,
+  CheckCircle,
+  Layers,
+  ArrowRight,
+  Loader2,
+} from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { adminApi } from '../../lib/api';
 import { Card, CardContent, Badge } from '../../components/ui';
 import styles from '../Dashboard.module.css';
+import localStyles from './AdminDashboard.module.css';
 
 interface TranscriptRecord {
   id: string;
@@ -37,23 +47,23 @@ interface QueueItem {
 
 const quickActions = [
   {
-    icon: <BarChart3 size={24} />,
+    icon: <BarChart3 size={18} />,
     title: 'Analytics',
-    description: 'Visualize certificate distribution by type and status',
+    description: 'Distribution by type and status',
     path: '/admin/analytics',
-    color: 'blue',
+    color: 'black',
   },
   {
-    icon: <FileText size={24} />,
+    icon: <FileText size={18} />,
     title: 'Transcript Requests',
-    description: 'Review, approve, and issue transcript applications',
+    description: 'Review and issue transcripts',
     path: '/admin/transcripts',
     color: 'orange',
   },
   {
-    icon: <Award size={24} />,
+    icon: <Award size={18} />,
     title: 'Certificate Requests',
-    description: 'Review and upload generated certificates',
+    description: 'Review and upload certificates',
     path: '/admin/certificates',
     color: 'green',
   },
@@ -65,12 +75,21 @@ function getStatusBadge(status: string) {
     return <Badge variant="success">{status}</Badge>;
   }
   if (['processing', 'applied'].includes(normalized)) {
-    return <Badge variant="warning">{status}</Badge>;
+    return <Badge variant="info">{status}</Badge>;
   }
   if (normalized === 'rejected') {
     return <Badge variant="error">{status}</Badge>;
   }
-  return <Badge variant="info">{status}</Badge>;
+  return <Badge variant="orange">{status}</Badge>;
+}
+
+function formatToday() {
+  return new Date().toLocaleDateString('en-IN', {
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
 }
 
 export function AdminDashboard() {
@@ -78,6 +97,7 @@ export function AdminDashboard() {
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [pendingCount, setPendingCount] = useState(0);
   const [processedCount, setProcessedCount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([
@@ -115,104 +135,124 @@ export function AdminDashboard() {
         );
         setQueue(all.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
+
+  const kpis = [
+    { label: 'Total Requests', value: queue.length, icon: <Layers size={18} />, tone: 'black' },
+    { label: 'Pending Review', value: pendingCount, icon: <Clock size={18} />, tone: 'orange' },
+    { label: 'Issued', value: processedCount, icon: <CheckCircle size={18} />, tone: 'green' },
+  ];
 
   return (
     <div className={styles.container}>
-      <div className={styles.welcomeSection}>
-        <div className={styles.welcomeContent}>
-          <h1 className={styles.welcomeTitle}>
-            Welcome, <span>{admin?.name?.split(' ')[0]}</span>
-          </h1>
-          <p className={styles.welcomeSubtitle}>Review requests and issue certificates for students</p>
+      {/* Page Header */}
+      <div className={styles.pageHeader}>
+        <div>
+          <p className={styles.eyebrow}>Admin Office</p>
+          <h1 className={styles.pageTitle}>Welcome, {admin?.name?.split(' ')[0] ?? 'Admin'}</h1>
+          <p className={styles.pageSubtitle}>{formatToday()}</p>
         </div>
-        <div className={styles.welcomeStats}>
-          <div className={styles.stat}>
-            <TrendingUp size={20} />
-            <span className={styles.statValue}>{queue.length}</span>
-            <span className={styles.statLabel}>Total Requests</span>
-          </div>
-          <div className={styles.stat}>
-            <Clock size={20} />
-            <span className={styles.statValue}>{pendingCount}</span>
-            <span className={styles.statLabel}>Pending Review</span>
-          </div>
-          <div className={styles.stat}>
-            <CheckCircle size={20} />
-            <span className={styles.statValue}>{processedCount}</span>
-            <span className={styles.statLabel}>Issued</span>
-          </div>
-        </div>
+        <Link to="/admin/analytics" className={styles.primaryAction}>
+          <BarChart3 size={16} />
+          View Analytics
+        </Link>
       </div>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Review Queues</h2>
-        <div className={styles.actionsGrid}>
-          {quickActions.map((action) => (
-            <Link key={action.title} to={action.path} className={styles.actionCard}>
-              <Card variant="elevated" padding="lg" className={styles.actionCardInner}>
-                <CardContent>
-                  <div className={`${styles.actionIcon} ${styles[action.color]}`}>{action.icon}</div>
-                  <h3 className={styles.actionTitle}>{action.title}</h3>
-                  <p className={styles.actionDescription}>{action.description}</p>
-                  <span className={styles.actionLink}>
-                    Open queue <ArrowRight size={16} />
-                  </span>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      </section>
+      {/* KPI Cards */}
+      <div className={`${styles.kpiGrid} ${localStyles.kpiGrid3}`}>
+        {kpis.map((kpi) => (
+          <Card key={kpi.label} variant="default" padding="none" className={styles.kpiCard}>
+            <div className={styles.kpiTop}>
+              <span className={styles.kpiLabel}>{kpi.label}</span>
+              <span className={`${styles.kpiIcon} ${styles[kpi.tone]}`}>{kpi.icon}</span>
+            </div>
+            <span className={styles.kpiValue}>{loading ? '—' : kpi.value}</span>
+          </Card>
+        ))}
+      </div>
 
-      <section className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Recent Requests</h2>
-        </div>
-
-        <Card variant="default" padding="none">
-          <div className={styles.tableWrapper}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>Reference</th>
-                  <th>Student</th>
-                  <th>Type</th>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {queue.length === 0 && (
-                  <tr>
-                    <td colSpan={6}>No requests yet</td>
-                  </tr>
-                )}
-                {queue.slice(0, 8).map((item) => (
-                  <tr key={item.id}>
-                    <td>
-                      <Link to={item.link} className={styles.referenceNo}>
-                        {item.reference}
-                      </Link>
-                    </td>
-                    <td>{item.student}</td>
-                    <td>{item.type}</td>
-                    <td>{new Date(item.date).toLocaleDateString('en-IN')}</td>
-                    <td>
-                      <span className={styles.amount}>&#8377; {item.amount.toFixed(2)}</span>
-                    </td>
-                    <td>
-                      <div className={styles.statusCell}>{getStatusBadge(item.status)}</div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      {/* Main Grid: Recent Requests + Review Queues */}
+      <div className={styles.mainGrid}>
+        <section className={styles.tableSection}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Recent Requests</h2>
           </div>
-        </Card>
-      </section>
+
+          <Card variant="default" padding="none">
+            <div className={styles.tableWrapper}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Reference</th>
+                    <th>Student</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loading && (
+                    <tr>
+                      <td colSpan={6} className={styles.emptyState}>
+                        <Loader2 size={16} className={styles.spinner} /> Loading requests…
+                      </td>
+                    </tr>
+                  )}
+                  {!loading && queue.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className={styles.emptyState}>
+                        No requests yet
+                      </td>
+                    </tr>
+                  )}
+                  {!loading &&
+                    queue.slice(0, 8).map((item) => (
+                      <tr key={item.id}>
+                        <td>
+                          <Link to={item.link} className={styles.referenceNo}>
+                            {item.reference}
+                          </Link>
+                        </td>
+                        <td>{item.student}</td>
+                        <td>{item.type}</td>
+                        <td>{new Date(item.date).toLocaleDateString('en-IN')}</td>
+                        <td>
+                          <span className={styles.amount}>&#8377; {item.amount.toFixed(2)}</span>
+                        </td>
+                        <td>{getStatusBadge(item.status)}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        </section>
+
+        <section className={styles.actionsSection}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Review Queues</h2>
+          </div>
+          <div className={styles.actionsList}>
+            {quickActions.map((action) => (
+              <Link key={action.title} to={action.path} className={styles.actionLinkCard}>
+                <Card variant="default" padding="none" className={styles.actionCardInner}>
+                  <CardContent className={styles.actionCardContent}>
+                    <span className={`${styles.actionIcon} ${styles[action.color]}`}>{action.icon}</span>
+                    <div className={styles.actionText}>
+                      <h3 className={styles.actionTitle}>{action.title}</h3>
+                      <p className={styles.actionDescription}>{action.description}</p>
+                    </div>
+                    <ArrowRight size={16} className={styles.actionArrow} />
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   );
 }

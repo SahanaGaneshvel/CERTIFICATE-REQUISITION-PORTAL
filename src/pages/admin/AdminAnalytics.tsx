@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Award, FileText, TrendingUp, PackageCheck } from 'lucide-react';
+import { Award, FileText, Layers, PackageCheck } from 'lucide-react';
 import { adminApi } from '../../lib/api';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui';
+import dashboardStyles from '../Dashboard.module.css';
 import styles from './AdminAnalytics.module.css';
 
 interface AnalyticsResponse {
@@ -14,6 +15,7 @@ interface AnalyticsResponse {
   certificatesByType: { type: string; count: number }[];
   certificatesByStatus: { status: string; count: number }[];
   transcriptsByStatus: { status: string; count: number }[];
+  trend: { date: string; certificates: number; transcripts: number }[];
 }
 
 const CERT_STATUS_LABEL: Record<string, string> = {
@@ -32,31 +34,31 @@ const TRANSCRIPT_STATUS_LABEL: Record<string, string> = {
   REJECTED: 'Rejected',
 };
 
-// Status color is reserved and fixed per state — never reassigned by rank or filter,
-// so "Rejected" is always the same hue everywhere in the app.
+// Status color is reserved and fixed per state — never reassigned by rank or
+// filter, so "Rejected" is always the same hue everywhere in the app.
 const STATUS_COLOR: Record<string, string> = {
   PENDING: 'var(--gray-400)',
-  APPLIED: 'var(--info)',
-  PROCESSING: 'var(--info)',
-  GENERATED: 'var(--success)',
-  READY: 'var(--success)',
-  DOWNLOADED: 'var(--primary-green)',
-  COLLECTED: 'var(--primary-green)',
+  APPLIED: 'var(--primary-orange)',
+  PROCESSING: 'var(--primary-orange)',
+  GENERATED: 'var(--primary-green)',
+  READY: 'var(--primary-green)',
+  DOWNLOADED: 'var(--green-dark)',
+  COLLECTED: 'var(--green-dark)',
   REJECTED: 'var(--error)',
 };
 
 // Fixed categorical order for certificate-type bars — never re-derived from sort
 // order, so the same type keeps the same color across reloads and filters.
-const TYPE_COLORS = ['var(--primary-orange)', 'var(--primary-green)', 'var(--gold)', 'var(--gray-600)', 'var(--orange-dark)', 'var(--green-dark)'];
+const TYPE_COLORS = ['var(--primary-orange)', 'var(--primary-green)', 'var(--gold)', 'var(--action-black)', 'var(--orange-dark)', 'var(--green-dark)'];
 
-function StatTile({ icon, label, value }: { icon: React.ReactNode; label: string; value: number }) {
+function KpiTile({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: number; tone: string }) {
   return (
-    <Card variant="default" padding="md" className={styles.statCard}>
-      <div className={styles.statIcon}>{icon}</div>
-      <div className={styles.statContent}>
-        <span className={styles.statValue}>{value}</span>
-        <span className={styles.statLabel}>{label}</span>
+    <Card variant="default" padding="none" className={dashboardStyles.kpiCard}>
+      <div className={dashboardStyles.kpiTop}>
+        <span className={dashboardStyles.kpiLabel}>{label}</span>
+        <span className={`${dashboardStyles.kpiIcon} ${dashboardStyles[tone]}`}>{icon}</span>
       </div>
+      <span className={dashboardStyles.kpiValue}>{value}</span>
     </Card>
   );
 }
@@ -131,6 +133,75 @@ function StatusBreakdown({
   );
 }
 
+const CHART_WIDTH = 640;
+const CHART_HEIGHT = 200;
+const CHART_PAD = 28;
+
+function buildLinePath(values: number[], max: number) {
+  const step = (CHART_WIDTH - CHART_PAD * 2) / (values.length - 1 || 1);
+  return values
+    .map((v, i) => {
+      const x = CHART_PAD + i * step;
+      const y = CHART_HEIGHT - CHART_PAD - (v / max) * (CHART_HEIGHT - CHART_PAD * 2);
+      return `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(' ');
+}
+
+function TrendChart({ trend }: { trend: AnalyticsResponse['trend'] }) {
+  const certificates = trend.map((t) => t.certificates);
+  const transcripts = trend.map((t) => t.transcripts);
+  const max = Math.max(...certificates, ...transcripts, 1);
+  const step = (CHART_WIDTH - CHART_PAD * 2) / (trend.length - 1 || 1);
+
+  const gridLines = [0, 0.25, 0.5, 0.75, 1];
+
+  return (
+    <div className={styles.trendChartWrapper}>
+      <svg
+        viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
+        className={styles.trendSvg}
+        role="img"
+        aria-label="Certificate and transcript requests over the last 7 days"
+      >
+        {gridLines.map((g) => {
+          const y = CHART_HEIGHT - CHART_PAD - g * (CHART_HEIGHT - CHART_PAD * 2);
+          return <line key={g} x1={CHART_PAD} y1={y} x2={CHART_WIDTH - CHART_PAD} y2={y} className={styles.gridLine} />;
+        })}
+
+        <path d={buildLinePath(certificates, max)} className={styles.lineCertificates} />
+        <path d={buildLinePath(transcripts, max)} className={styles.lineTranscripts} />
+
+        {trend.map((t, i) => {
+          const x = CHART_PAD + i * step;
+          const yCert = CHART_HEIGHT - CHART_PAD - (t.certificates / max) * (CHART_HEIGHT - CHART_PAD * 2);
+          const yTrans = CHART_HEIGHT - CHART_PAD - (t.transcripts / max) * (CHART_HEIGHT - CHART_PAD * 2);
+          return (
+            <g key={t.date}>
+              <circle cx={x} cy={yCert} r={4} className={styles.dotCertificates} />
+              <circle cx={x} cy={yTrans} r={4} className={styles.dotTranscripts} />
+              <text x={x} y={CHART_HEIGHT - 6} className={styles.axisLabel} textAnchor="middle">
+                {new Date(t.date).toLocaleDateString('en-IN', { weekday: 'short' })}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+
+      <div className={styles.trendLegend}>
+        <div className={styles.legendItem}>
+          <span className={styles.legendSwatch} style={{ background: 'var(--primary-orange)' }} />
+          <span className={styles.legendLabel}>Certificates</span>
+        </div>
+        <div className={styles.legendItem}>
+          <span className={styles.legendSwatch} style={{ background: 'var(--primary-green)' }} />
+          <span className={styles.legendLabel}>Transcripts</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function AdminAnalytics() {
   const [data, setData] = useState<AnalyticsResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -143,32 +214,47 @@ export function AdminAnalytics() {
   }, []);
 
   if (isLoading) {
-    return <div className={styles.container}>Loading analytics...</div>;
+    return <div className={dashboardStyles.container}>Loading analytics…</div>;
   }
 
   if (!data) {
-    return <div className={styles.container}>Failed to load analytics.</div>;
+    return <div className={dashboardStyles.container}>Failed to load analytics.</div>;
   }
 
   const totalRequests = data.totals.certificates + data.totals.transcripts;
   const totalIssued = data.totals.certificatesIssued + data.totals.transcriptsIssued;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <p className={styles.eyebrow}>Analytics</p>
-        <h1 className={styles.title}>Certificate Distribution Overview</h1>
+    <div className={dashboardStyles.container}>
+      <div className={dashboardStyles.pageHeader}>
+        <div>
+          <p className={dashboardStyles.eyebrow}>Analytics</p>
+          <h1 className={dashboardStyles.pageTitle}>Certificate Distribution Overview</h1>
+          <p className={dashboardStyles.pageSubtitle}>How requests break down by type, status, and time</p>
+        </div>
       </div>
 
-      <div className={styles.statsGrid}>
-        <StatTile icon={<TrendingUp size={20} />} label="Total Requests" value={totalRequests} />
-        <StatTile icon={<PackageCheck size={20} />} label="Total Issued" value={totalIssued} />
-        <StatTile icon={<Award size={20} />} label="Certificate Requests" value={data.totals.certificates} />
-        <StatTile icon={<FileText size={20} />} label="Transcript Requests" value={data.totals.transcripts} />
+      <div className={dashboardStyles.kpiGrid}>
+        <KpiTile icon={<Layers size={18} />} label="Total Requests" value={totalRequests} tone="black" />
+        <KpiTile icon={<PackageCheck size={18} />} label="Total Issued" value={totalIssued} tone="green" />
+        <KpiTile icon={<Award size={18} />} label="Certificate Requests" value={data.totals.certificates} tone="orange" />
+        <KpiTile icon={<FileText size={18} />} label="Transcript Requests" value={data.totals.transcripts} tone="orange" />
       </div>
+
+      <Card variant="default" padding="lg">
+        <CardHeader>
+          <div className={styles.trendHeader}>
+            <CardTitle>Requests Overview</CardTitle>
+            <span className={styles.periodLabel}>Last 7 days</span>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <TrendChart trend={data.trend} />
+        </CardContent>
+      </Card>
 
       <div className={styles.chartsGrid}>
-        <Card variant="elevated" padding="lg">
+        <Card variant="default" padding="lg">
           <CardHeader>
             <CardTitle>Certificates by Type</CardTitle>
           </CardHeader>
@@ -177,7 +263,7 @@ export function AdminAnalytics() {
           </CardContent>
         </Card>
 
-        <Card variant="elevated" padding="lg">
+        <Card variant="default" padding="lg">
           <CardHeader>
             <CardTitle>Certificate Requests by Status</CardTitle>
           </CardHeader>
@@ -186,7 +272,7 @@ export function AdminAnalytics() {
           </CardContent>
         </Card>
 
-        <Card variant="elevated" padding="lg">
+        <Card variant="default" padding="lg">
           <CardHeader>
             <CardTitle>Transcript Requests by Status</CardTitle>
           </CardHeader>
