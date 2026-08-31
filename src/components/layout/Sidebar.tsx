@@ -97,11 +97,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
       <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
         <div className={styles.studentInfo}>
           <div className={styles.studentAvatar}>
-            <User size={32} />
-          </div>
-          <div className={styles.studentDetails}>
-            <span className={styles.studentName}>Student Portal</span>
-            <span className={styles.studentInstitution}>HITS</span>
+            <img src="/hindustan-logo.png" alt="Hindustan Institute of Technology & Science" className={styles.studentLogo} />
           </div>
         </div>
 

@@ -2,7 +2,6 @@ import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, FileText, Award, Menu, X, BarChart3 } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import styles from '../../components/layout/Sidebar.module.css';
-import localStyles from './AdminSidebar.module.css';
 
 const menuItems = [
   { icon: <LayoutDashboard size={20} />, label: 'Overview', path: '/admin/dashboard' },
@@ -27,10 +26,8 @@ export function AdminSidebar({ isOpen, onToggle }: AdminSidebarProps) {
 
       <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
         <div className={styles.studentInfo}>
-          <div className={localStyles.brandLockup}>
-            <span className={localStyles.brandName}>HINDUSTAN</span>
-            <span className={localStyles.brandSubtitle}>Institute of Technology &amp; Science</span>
-            <span className={localStyles.brandUniversity}>(Deemed to be University)</span>
+          <div className={styles.studentAvatar}>
+            <img src="/hindustan-logo.png" alt="Hindustan Institute of Technology & Science" className={styles.studentLogo} />
           </div>
         </div>
 
