@@ -42,18 +42,19 @@
   align-items: center;
   gap: var(--spacing-sm);
   padding: 10px var(--spacing-lg);
-  background: var(--action-black);
+  background: var(--gradient-secondary);
   color: var(--white);
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
-  transition: background var(--transition-fast);
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
 }
 
 .primaryAction:hover {
-  background: var(--action-black-hover);
+  box-shadow: var(--shadow-glow-green);
+  transform: translateY(-1px);
 }
 
 /* KPI Cards */

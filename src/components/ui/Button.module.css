@@ -23,16 +23,15 @@
 }
 
 /* Variants */
-/* Primary CTA — strong black action (Submit, Save, Continue, Create) */
+/* Primary CTA — brand green action (Submit, Save, Continue, Create) */
 .primary {
-  background: var(--action-black);
+  background: var(--gradient-secondary);
   color: var(--white);
   box-shadow: var(--shadow-md);
 }
 
 .primary:hover:not(:disabled) {
-  background: var(--action-black-hover);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-lg), var(--shadow-glow-green);
   transform: translateY(-1px);
 }
 
