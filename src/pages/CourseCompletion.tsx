@@ -7,10 +7,23 @@ import styles from './CourseCompletion.module.css';
 
 const certificateTypes = [
   { value: '', label: 'Select Certificate' },
+  { value: 'transcript', label: 'Transcript' },
+  { value: 'attestation-photocopies', label: 'Attestation of Photocopies of Grade Sheets and Certificates' },
+  { value: 'certificate-correction', label: 'Certificate Correction' },
+  { value: 'duplicate-gradesheets', label: 'Duplicate Grade Sheets/Certificates' },
+  { value: 'migration', label: 'Migration Certificate' },
+  { value: 'return-10th-marksheet', label: 'Request for Return of 10th Original Marksheet' },
+  { value: 'return-12th-marksheet', label: 'Request for Return of 12th Original Marksheet' },
   { value: 'bonafide', label: 'Bonafide Certificate' },
+  { value: 'conduct', label: 'Conduct Certificate' },
   { value: 'course-completion', label: 'Course Completion Certificate' },
-  { value: 'character', label: 'Character Certificate' },
+  { value: 'provisional', label: 'Provisional Certificate' },
+  { value: 'transfer', label: 'Transfer Certificate (TC)' },
   { value: 'medium-instruction', label: 'Medium of Instruction Certificate' },
+  { value: 'internship-permission', label: 'Internship Permission/Recommendation Letter' },
+  { value: 'student-status', label: 'Student Status Certificate' },
+  { value: 'noc', label: 'No Objection Certificate (NOC)' },
+  { value: 'consolidated-semester-gradesheet', label: 'Consolidated Semester Grade Sheet' },
 ];
 
 const purposes = [
