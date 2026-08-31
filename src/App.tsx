@@ -16,7 +16,7 @@ import {
   PaymentHistory,
   ApplicationStatus,
 } from './pages';
-import { AdminLogin, AdminDashboard, AdminTranscripts, AdminCertificates } from './pages/admin';
+import { AdminLogin, AdminDashboard, AdminTranscripts, AdminCertificates, AdminAnalytics } from './pages/admin';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, user } = useAuth();
@@ -171,6 +171,7 @@ function AppRoutes() {
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="transcripts" element={<AdminTranscripts />} />
         <Route path="certificates" element={<AdminCertificates />} />
+        <Route path="analytics" element={<AdminAnalytics />} />
       </Route>
 
       {/* Catch all */}

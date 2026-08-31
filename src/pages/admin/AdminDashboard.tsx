@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FileText, Award, Clock, CheckCircle, ArrowRight, TrendingUp } from 'lucide-react';
+import { FileText, Award, Clock, CheckCircle, ArrowRight, TrendingUp, BarChart3 } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { adminApi } from '../../lib/api';
 import { Card, CardContent, Badge } from '../../components/ui';
@@ -36,6 +36,13 @@ interface QueueItem {
 }
 
 const quickActions = [
+  {
+    icon: <BarChart3 size={24} />,
+    title: 'Analytics',
+    description: 'Visualize certificate distribution by type and status',
+    path: '/admin/analytics',
+    color: 'blue',
+  },
   {
     icon: <FileText size={24} />,
     title: 'Transcript Requests',

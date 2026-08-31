@@ -83,6 +83,55 @@ adminRouter.post('/certificate-requests/:id/upload-certificate', upload.single('
   res.json({ request: updated });
 }));
 
+// Aggregate view for the admin analytics dashboard: how many certificates/transcripts
+// have been issued, broken down by type and by status. Grouped in the DB rather than
+// pulled row-by-row since this only needs counts, not the underlying records.
+adminRouter.get('/analytics', asyncHandler(async (_req, res) => {
+  const [
+    certByType,
+    certByStatus,
+    transcriptByStatus,
+    totalCertificates,
+    totalTranscripts,
+  ] = await Promise.all([
+    prisma.certificateRequest.groupBy({
+      by: ['certificateType'],
+      _count: { _all: true },
+    }),
+    prisma.certificateRequest.groupBy({
+      by: ['status'],
+      _count: { _all: true },
+    }),
+    prisma.transcriptApplication.groupBy({
+      by: ['status'],
+      _count: { _all: true },
+    }),
+    prisma.certificateRequest.count(),
+    prisma.transcriptApplication.count(),
+  ]);
+
+  const certificatesIssued = certByStatus
+    .filter((c) => c.status === 'GENERATED' || c.status === 'DOWNLOADED')
+    .reduce((sum, c) => sum + c._count._all, 0);
+  const transcriptsIssued = transcriptByStatus
+    .filter((t) => t.status === 'READY' || t.status === 'COLLECTED')
+    .reduce((sum, t) => sum + t._count._all, 0);
+
+  res.json({
+    totals: {
+      certificates: totalCertificates,
+      transcripts: totalTranscripts,
+      certificatesIssued,
+      transcriptsIssued,
+    },
+    certificatesByType: certByType
+      .map((c) => ({ type: c.certificateType, count: c._count._all }))
+      .sort((a, b) => b.count - a.count),
+    certificatesByStatus: certByStatus.map((c) => ({ status: c.status, count: c._count._all })),
+    transcriptsByStatus: transcriptByStatus.map((t) => ({ status: t.status, count: t._count._all })),
+  });
+}));
+
 const createStudentSchema = z.object({
   registerNo: z.string().min(3),
   dateOfBirth: z.string().min(4),

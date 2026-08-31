@@ -1,10 +1,11 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, FileText, Award, User, Menu, X } from 'lucide-react';
+import { LayoutDashboard, FileText, Award, User, Menu, X, BarChart3 } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import styles from '../../components/layout/Sidebar.module.css';
 
 const menuItems = [
   { icon: <LayoutDashboard size={20} />, label: 'Overview', path: '/admin/dashboard' },
+  { icon: <BarChart3 size={20} />, label: 'Analytics', path: '/admin/analytics' },
   { icon: <FileText size={20} />, label: 'Transcript Requests', path: '/admin/transcripts' },
   { icon: <Award size={20} />, label: 'Certificate Requests', path: '/admin/certificates' },
 ];
