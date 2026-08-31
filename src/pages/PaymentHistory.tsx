@@ -67,7 +67,7 @@ export function PaymentHistory() {
       case 'failed':
         return <Badge variant="error">Failed - Marked bounced as transaction</Badge>;
       case 'pending':
-        return <Badge variant="warning">Initiated and Not Completed</Badge>;
+        return <Badge variant="orange">Initiated and Not Completed</Badge>;
       default:
         return <Badge>{status}</Badge>;
     }
@@ -93,32 +93,33 @@ export function PaymentHistory() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
+        <p className={styles.eyebrow}>Payments</p>
         <h1 className={styles.title}>Payment Transaction Log</h1>
       </div>
 
       {/* Stats */}
       <div className={styles.statsGrid}>
-        <Card variant="elevated" padding="md" className={styles.statCard}>
+        <Card variant="default" padding="md" className={styles.statCard}>
           <div className={styles.statIcon + ' ' + styles.successBg}>
-            <CheckCircle size={24} />
+            <CheckCircle size={20} />
           </div>
           <div className={styles.statContent}>
             <span className={styles.statValue}>{totalSuccess}</span>
             <span className={styles.statLabel}>Successful</span>
           </div>
         </Card>
-        <Card variant="elevated" padding="md" className={styles.statCard}>
+        <Card variant="default" padding="md" className={styles.statCard}>
           <div className={styles.statIcon + ' ' + styles.failedBg}>
-            <XCircle size={24} />
+            <XCircle size={20} />
           </div>
           <div className={styles.statContent}>
             <span className={styles.statValue}>{totalFailed}</span>
             <span className={styles.statLabel}>Failed</span>
           </div>
         </Card>
-        <Card variant="elevated" padding="md" className={styles.statCard}>
+        <Card variant="default" padding="md" className={styles.statCard}>
           <div className={styles.statIcon + ' ' + styles.pendingBg}>
-            <Clock size={24} />
+            <Clock size={20} />
           </div>
           <div className={styles.statContent}>
             <span className={styles.statValue}>{totalPending}</span>
@@ -128,7 +129,7 @@ export function PaymentHistory() {
       </div>
 
       {/* Transaction Table */}
-      <Card variant="elevated" padding="lg">
+      <Card variant="default" padding="lg">
         <CardHeader>
           <div className={styles.tableHeader}>
             <CardTitle>Transaction History</CardTitle>
@@ -157,12 +158,12 @@ export function PaymentHistory() {
               <tbody>
                 {isLoading && (
                   <tr>
-                    <td colSpan={5}>Loading...</td>
+                    <td colSpan={6} className={styles.emptyRow}>Loading...</td>
                   </tr>
                 )}
                 {!isLoading && filteredTransactions.length === 0 && (
                   <tr>
-                    <td colSpan={5}>No transactions yet</td>
+                    <td colSpan={6} className={styles.emptyRow}>No transactions yet</td>
                   </tr>
                 )}
                 {filteredTransactions.map((transaction) => (

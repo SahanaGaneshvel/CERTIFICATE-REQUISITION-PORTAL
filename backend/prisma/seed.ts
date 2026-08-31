@@ -26,19 +26,19 @@ async function main() {
 
   const studentDobHash = await bcrypt.hash('15-03-2005', 10);
   await prisma.user.upsert({
-    where: { registerNo: '24CU0310001' },
+    where: { registerNo: '24CU0320018' },
     update: {},
     create: {
-      registerNo: '24CU0310001',
+      registerNo: '24CU0320018',
       passwordHash: studentDobHash,
-      name: 'Vijay Bala Mahalingam',
+      name: 'Sahana G',
       dateOfBirth: '15-03-2005',
       degree: 'B.Tech',
       branch: 'Computer Science and Engineering',
-      campus: 'Chennai',
-      gender: 'Male',
+      campus: 'Padur',
+      gender: 'Female',
       admittedYear: 2024,
-      institution: 'Hindustan Institute of Technology and Science, Chennai',
+      institution: 'Hindustan Institute of Engineering and Technology, Padur',
       role: 'STUDENT',
     },
   });

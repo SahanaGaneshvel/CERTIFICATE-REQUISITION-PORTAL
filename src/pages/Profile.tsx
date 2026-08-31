@@ -43,16 +43,19 @@ export function Profile() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Profile</h1>
+        <div>
+          <p className={styles.eyebrow}>Account</p>
+          <h1 className={styles.title}>Profile</h1>
+        </div>
         <Badge variant="green">Verified Student</Badge>
       </div>
 
       {/* Profile Card */}
-      <Card variant="gradient" padding="lg" className={styles.profileCard}>
+      <Card variant="default" padding="lg" className={styles.profileCard}>
         <div className={styles.profileHeader}>
           <div className={styles.avatarSection}>
             <div className={styles.avatar}>
-              <User size={48} />
+              <User size={40} />
             </div>
             <div className={styles.avatarInfo}>
               <h2 className={styles.profileName}>{user?.name}</h2>
@@ -72,7 +75,7 @@ export function Profile() {
       {/* Profile Sections */}
       <div className={styles.sectionsGrid}>
         {profileSections.map((section) => (
-          <Card key={section.title} variant="elevated" padding="lg">
+          <Card key={section.title} variant="default" padding="lg">
             <CardHeader>
               <div className={styles.sectionHeader}>
                 <div className={styles.sectionIcon}>{section.icon}</div>

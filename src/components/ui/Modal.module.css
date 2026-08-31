@@ -16,7 +16,7 @@
 
 .modal {
   background: var(--white);
-  border-radius: var(--radius-2xl);
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-2xl);
   max-height: calc(100vh - 4rem);
   overflow: hidden;

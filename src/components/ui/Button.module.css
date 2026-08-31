@@ -18,19 +18,21 @@
 }
 
 .button:focus-visible {
-  outline: 2px solid var(--primary-orange);
+  box-shadow: var(--focus-ring);
   outline-offset: 2px;
 }
 
 /* Variants */
+/* Primary CTA — strong black action (Submit, Save, Continue, Create) */
 .primary {
-  background: var(--gradient-primary);
+  background: var(--action-black);
   color: var(--white);
   box-shadow: var(--shadow-md);
 }
 
 .primary:hover:not(:disabled) {
-  box-shadow: var(--shadow-lg), var(--shadow-glow-orange);
+  background: var(--action-black-hover);
+  box-shadow: var(--shadow-lg);
   transform: translateY(-1px);
 }
 
@@ -38,6 +40,7 @@
   transform: translateY(0);
 }
 
+/* Secondary CTA — supporting positive action, brand green */
 .secondary {
   background: var(--gradient-secondary);
   color: var(--white);
@@ -49,9 +52,10 @@
   transform: translateY(-1px);
 }
 
+/* Outline — tertiary action, brand orange border/text */
 .outline {
-  background: transparent;
-  color: var(--primary-orange);
+  background: var(--white);
+  color: var(--orange-dark);
   border: 2px solid var(--primary-orange);
 }
 
@@ -75,7 +79,7 @@
 }
 
 .danger:hover:not(:disabled) {
-  background: #dc2626;
+  background: #b8241a;
 }
 
 /* Sizes */

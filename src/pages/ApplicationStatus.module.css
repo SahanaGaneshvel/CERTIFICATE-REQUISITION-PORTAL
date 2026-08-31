@@ -2,14 +2,23 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xl);
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
 }
 
 .header {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: 2px;
+}
+
+.eyebrow {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--primary-orange);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
 }
 
 .title {
@@ -26,42 +35,48 @@
 }
 
 /* Stats Grid */
+
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
 .statCard {
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
+  border: 1px solid var(--gray-100);
 }
 
 .statIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-lg);
-  color: var(--white);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
 }
 
 .totalBg {
-  background: var(--primary-orange);
+  background: var(--gray-100);
+  color: var(--action-black);
 }
 
 .pendingBg {
-  background: var(--info);
+  background: var(--orange-light);
+  color: var(--orange-dark);
 }
 
 .processingBg {
-  background: var(--warning);
+  background: var(--orange-light);
+  color: var(--orange-dark);
 }
 
 .completedBg {
-  background: var(--success);
+  background: var(--green-light);
+  color: var(--green-dark);
 }
 
 .statContent {
@@ -73,6 +88,7 @@
   font-size: var(--font-size-2xl);
   font-weight: 700;
   color: var(--gray-900);
+  line-height: 1.2;
 }
 
 .statLabel {
@@ -81,40 +97,46 @@
 }
 
 /* Quick Actions */
+
 .quickActions {
   display: flex;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
 }
 
 .quickAction {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md) var(--spacing-lg);
+  gap: var(--spacing-sm);
+  padding: 10px var(--spacing-lg);
   background: var(--white);
   border: 1px solid var(--gray-200);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   color: var(--gray-700);
+  font-size: var(--font-size-sm);
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: border-color var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .quickAction:hover {
-  background: var(--gray-50);
   border-color: var(--primary-orange);
-  color: var(--primary-orange);
+  color: var(--orange-dark);
 }
 
 .quickAction span {
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* Table Header */
+
 .tableHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
 }
 
 .filters {
@@ -123,23 +145,33 @@
 }
 
 /* Sections */
+
 .section {
   margin-bottom: var(--spacing-xl);
+}
+
+.section:last-child {
+  margin-bottom: 0;
 }
 
 .sectionTitle {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-sm);
   font-weight: 600;
-  color: var(--gray-800);
-  margin-bottom: var(--spacing-md);
+  color: var(--gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 var(--spacing-md);
 }
 
 /* Table */
+
 .tableWrapper {
   overflow-x: auto;
+  border: 1px solid var(--gray-100);
+  border-radius: var(--radius-md);
 }
 
 .table {
@@ -157,8 +189,11 @@
 }
 
 .table th {
+  font-size: var(--font-size-xs);
   font-weight: 600;
-  color: var(--gray-600);
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   background: var(--gray-50);
 }
 
@@ -166,11 +201,16 @@
   color: var(--gray-700);
 }
 
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
 .table tbody tr:hover {
   background: var(--gray-50);
 }
 
-.refNo, .certType {
+.refNo,
+.certType {
   font-weight: 600;
   color: var(--gray-900);
 }
@@ -195,11 +235,11 @@
 }
 
 .iconWarning {
-  color: var(--warning);
+  color: var(--primary-orange);
 }
 
 .iconInfo {
-  color: var(--info);
+  color: var(--primary-orange);
 }
 
 .actions {
@@ -208,6 +248,7 @@
 }
 
 /* Empty State */
+
 .emptyState {
   display: flex;
   flex-direction: column;
@@ -215,7 +256,7 @@
   justify-content: center;
   padding: var(--spacing-3xl);
   text-align: center;
-  color: var(--gray-400);
+  color: var(--gray-300);
 }
 
 .emptyState h3 {
@@ -254,7 +295,14 @@
   .tableHeader {
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--spacing-md);
+  }
+
+  .filters {
+    width: 100%;
+  }
+
+  .filters > * {
+    flex: 1;
   }
 
   .quickActions {

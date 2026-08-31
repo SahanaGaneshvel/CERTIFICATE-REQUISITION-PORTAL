@@ -2,14 +2,23 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xl);
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
 }
 
 .header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.eyebrow {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--primary-orange);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
 }
 
 .title {
@@ -23,35 +32,39 @@
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
 .statCard {
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
+  border: 1px solid var(--gray-100);
 }
 
 .statIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-lg);
-  color: var(--white);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
 }
 
 .successBg {
-  background: var(--success);
+  background: var(--success-light);
+  color: var(--green-dark);
 }
 
 .failedBg {
-  background: var(--error);
+  background: var(--error-light);
+  color: var(--error);
 }
 
 .pendingBg {
-  background: var(--warning);
+  background: var(--orange-light);
+  color: var(--orange-dark);
 }
 
 .statContent {
@@ -63,6 +76,7 @@
   font-size: var(--font-size-2xl);
   font-weight: 700;
   color: var(--gray-900);
+  line-height: 1.2;
 }
 
 .statLabel {
@@ -76,6 +90,8 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
 }
 
 .tableActions {
@@ -86,6 +102,8 @@
 /* Table */
 .tableWrapper {
   overflow-x: auto;
+  border: 1px solid var(--gray-100);
+  border-radius: var(--radius-md);
 }
 
 .table {
@@ -103,8 +121,11 @@
 }
 
 .table th {
+  font-size: var(--font-size-xs);
   font-weight: 600;
-  color: var(--gray-600);
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   background: var(--gray-50);
 }
 
@@ -112,8 +133,19 @@
   color: var(--gray-700);
 }
 
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
 .table tbody tr:hover {
   background: var(--gray-50);
+}
+
+.emptyRow {
+  text-align: center;
+  color: var(--gray-500);
+  padding: var(--spacing-2xl) !important;
+  white-space: normal !important;
 }
 
 .studentId {
@@ -122,8 +154,9 @@
 }
 
 .transId {
-  font-family: monospace;
+  font-family: 'SFMono-Regular', Consolas, monospace;
   font-size: var(--font-size-xs);
+  color: var(--gray-600);
 }
 
 .amount {
@@ -146,7 +179,7 @@
 }
 
 .pendingIcon {
-  color: var(--warning);
+  color: var(--primary-orange);
 }
 
 @media (max-width: 768px) {

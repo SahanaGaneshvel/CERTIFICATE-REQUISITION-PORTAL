@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Calendar, Shield, Eye, EyeOff } from 'lucide-react';
+import { User, Calendar } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { Button, Input, Card } from '../components/ui';
+import { Button, Input } from '../components/ui';
 import styles from './Login.module.css';
 
 export function Login() {
   const [registerNo, setRegisterNo] = useState('');
   const [dob, setDob] = useState('');
   const [captcha, setCaptcha] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
   const [generatedCaptcha] = useState(() =>
     Math.random().toString(36).substring(2, 8).toUpperCase()
   );
@@ -23,7 +23,7 @@ export function Login() {
     e.preventDefault();
     setError('');
 
-    if (!registerNo || !dob || !captcha) {
+    if (!registerNo.trim() || !dob.trim() || !captcha.trim()) {
       setError('Please fill in all fields');
       return;
     }
@@ -36,7 +36,11 @@ export function Login() {
     setIsLoading(true);
 
     try {
-      const success = await login(registerNo, dob);
+      const success = await login(
+        registerNo.trim(),
+        dob.trim()
+      );
+
       if (success) {
         navigate('/registration');
       } else {
@@ -50,126 +54,126 @@ export function Login() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.backgroundPattern} />
+    <div className={styles.page}>
+      <div className={styles.orb1} />
+      <div className={styles.orb2} />
+      <div className={styles.orb3} />
 
-      <div className={styles.content}>
-        <div className={styles.brandSection}>
-          <div className={styles.logoContainer}>
-            <img
-              src="/hindustan-logo.png"
-              alt="Hindustan Institute of Technology & Science"
-              className={styles.logo}
-            />
-          </div>
-          <h1 className={styles.brandTitle}>HINDUSTAN</h1>
-          <p className={styles.brandSubtitle}>Institute of Technology & Science</p>
-          <span className={styles.brandUniversity}>(Deemed to be University)</span>
-
-          <div className={styles.portalBadge}>
-            <span>CERTIFICATE REQUISITION PORTAL</span>
-          </div>
-
-          <div className={styles.features}>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>
-                <Shield size={24} />
-              </div>
-              <div className={styles.featureText}>
-                <h3>Secure Access</h3>
-                <p>Your data is protected with enterprise-grade security</p>
-              </div>
+      <div className={styles.card}>
+        {/* LEFT — LOGIN FORM */}
+        <div className={styles.formPanel}>
+          <div className={styles.formWrap}>
+            <div className={styles.formHeader}>
+              <h1>Welcome Back!</h1>
+              <p>Sign in with your student credentials to continue</p>
             </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>
-                <Calendar size={24} />
+
+            <form
+              onSubmit={handleSubmit}
+              className={`${styles.form} ${styles.formCard}`}
+            >
+              {error && (
+                <div className={styles.errorAlert}>
+                  {error}
+                </div>
+              )}
+
+              {/* REGISTER NUMBER */}
+              <Input
+                label="Register Number"
+                placeholder="Enter your register number"
+                value={registerNo}
+                onChange={(e) =>
+                  setRegisterNo(e.target.value.toUpperCase())
+                }
+                leftIcon={<User size={18} />}
+                required
+              />
+
+              {/* DATE OF BIRTH */}
+              <Input
+                label="Date of Birth"
+                type="text"
+                placeholder="DD-MM-YYYY"
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+                leftIcon={<Calendar size={18} />}
+                required
+              />
+
+              {/* CAPTCHA */}
+              <div className={styles.captchaSection}>
+                <Input
+                  label="Word Verification"
+                  placeholder="Enter the code shown below"
+                  value={captcha}
+                  onChange={(e) => setCaptcha(e.target.value)}
+                  required
+                />
+
+                <div className={styles.captchaBoxWrap}>
+                  <span className={styles.captchaLabel}>
+                    Code
+                  </span>
+
+                  <div className={styles.captchaBox}>
+                    <span className={styles.captchaText}>
+                      {generatedCaptcha}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div className={styles.featureText}>
-                <h3>Quick Processing</h3>
-                <p>Get your certificates processed efficiently</p>
-              </div>
+
+              {/* SIGN IN */}
+              <Button
+                type="submit"
+                variant="primary"
+                fullWidth
+                size="lg"
+                isLoading={isLoading}
+                className={styles.signInButton}
+              >
+                Sign In
+              </Button>
+            </form>
+
+            <div className={styles.formFooter}>
+              <p>
+                Need help? Contact{' '}
+                <a href="mailto:support@hindustanuniv.ac.in">
+                  support@hindustanuniv.ac.in
+                </a>
+              </p>
             </div>
           </div>
         </div>
 
-        <Card className={styles.loginCard} variant="elevated" padding="lg">
-          <div className={styles.cardHeader}>
-            <div className={styles.avatarIcon}>
-              <User size={32} />
-            </div>
-            <h2>Student Login</h2>
-            <p>Enter your credentials to access the portal</p>
-          </div>
-
-          <form onSubmit={handleSubmit} className={styles.form}>
-            {error && (
-              <div className={styles.errorAlert}>
-                {error}
-              </div>
-            )}
-
-            <Input
-              label="Register Number"
-              placeholder="Enter your register number"
-              value={registerNo}
-              onChange={(e) => setRegisterNo(e.target.value)}
-              leftIcon={<User size={20} />}
-              required
+        {/* RIGHT — BRAND PANEL */}
+        <div className={styles.brandPanel}>
+          <div className={styles.brandContent}>
+            <img
+              src="/hindustan-logo-full.png"
+              alt="Hindustan Institute of Technology & Science"
+              className={styles.brandLogo}
             />
 
-            <Input
-              label="Date of Birth"
-              type={showPassword ? 'text' : 'password'}
-              placeholder="DDMMYYYY"
-              value={dob}
-              onChange={(e) => setDob(e.target.value)}
-              leftIcon={<Calendar size={20} />}
-              rightIcon={
-                <button
-                  type="button"
-                  className={styles.togglePassword}
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              }
-              required
-            />
-
-            <div className={styles.captchaSection}>
-              <Input
-                label="Word Verification"
-                placeholder="Enter the code shown below"
-                value={captcha}
-                onChange={(e) => setCaptcha(e.target.value)}
-                required
-              />
-              <div className={styles.captchaBox}>
-                <span className={styles.captchaText}>{generatedCaptcha}</span>
-              </div>
+            <div className={styles.portalBadge}>
+              Certificate Requisition Portal
             </div>
 
-            <Button
-              type="submit"
-              fullWidth
-              size="lg"
-              isLoading={isLoading}
-            >
-              LOGIN
-            </Button>
-          </form>
-
-          <div className={styles.cardFooter}>
-            <p>
-              Need help? Contact <a href="mailto:support@hindustanuniv.ac.in">support@hindustanuniv.ac.in</a>
+            <p className={styles.brandSubtext}>
+              A unified platform to request, track,
+              <br />
+              and manage academic certificates.
             </p>
           </div>
-        </Card>
-      </div>
 
-      <footer className={styles.footer}>
-        <p>&copy; {new Date().getFullYear()} Hindustan Institute of Technology & Science. All rights reserved.</p>
-      </footer>
+          <p className={styles.brandFooter}>
+            &copy; {new Date().getFullYear()} Hindustan Institute of
+            Technology &amp; Science
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

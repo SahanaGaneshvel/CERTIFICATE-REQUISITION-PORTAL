@@ -35,7 +35,7 @@
 }
 
 .dragActive {
-  background: rgba(245, 130, 31, 0.05);
+  background: var(--orange-lighter);
   border-color: var(--primary-orange);
   border-style: solid;
 }
