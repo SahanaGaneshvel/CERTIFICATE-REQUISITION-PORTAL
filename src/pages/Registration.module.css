@@ -25,9 +25,10 @@
   justify-content: center;
   gap: var(--spacing-lg);
   padding: var(--spacing-lg);
-  background: linear-gradient(135deg, var(--primary-dark) 0%, #0f3460 100%);
+  background: var(--gradient-primary);
   border-radius: var(--radius-xl);
   margin-bottom: var(--spacing-xl);
+  box-shadow: var(--shadow-md);
 }
 
 .logo {

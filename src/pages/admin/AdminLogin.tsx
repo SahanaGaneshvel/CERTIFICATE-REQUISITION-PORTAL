@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShieldCheck, User, Lock, Eye, EyeOff, ClipboardCheck, Award } from 'lucide-react';
+import { User, Lock, Eye, EyeOff, ShieldCheck } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
-import { Button, Input, Card } from '../../components/ui';
+import { Button, Input } from '../../components/ui';
 import styles from '../Login.module.css';
 
 export function AdminLogin() {
@@ -19,14 +19,14 @@ export function AdminLogin() {
     e.preventDefault();
     setError('');
 
-    if (!registerNo || !password) {
+    if (!registerNo.trim() || !password.trim()) {
       setError('Please enter your admin ID and password');
       return;
     }
 
     setIsLoading(true);
     try {
-      const success = await login(registerNo, password);
+      const success = await login(registerNo.trim(), password);
       if (success) {
         navigate('/admin/dashboard');
       } else {
@@ -40,103 +40,96 @@ export function AdminLogin() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.backgroundPattern} />
+    <div className={styles.page}>
+      <div className={styles.orb1} />
+      <div className={styles.orb2} />
+      <div className={styles.orb3} />
 
-      <div className={styles.content}>
-        <div className={styles.brandSection}>
-          <div className={styles.logoContainer}>
-            <img
-              src="/hindustan-logo.png"
-              alt="Hindustan Institute of Technology & Science"
-              className={styles.logo}
-            />
-          </div>
-          <h1 className={styles.brandTitle}>HINDUSTAN</h1>
-          <p className={styles.brandSubtitle}>Institute of Technology & Science</p>
-          <span className={styles.brandUniversity}>(Deemed to be University)</span>
-
-          <div className={styles.portalBadge}>
-            <span>ADMIN OFFICE PORTAL</span>
-          </div>
-
-          <div className={styles.features}>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>
-                <ClipboardCheck size={24} />
-              </div>
-              <div className={styles.featureText}>
-                <h3>Review Requests</h3>
-                <p>Approve, reject, and track transcript and certificate requests</p>
-              </div>
+      <div className={styles.card}>
+        {/* LEFT — LOGIN FORM */}
+        <div className={styles.formPanel}>
+          <div className={styles.formWrap}>
+            <div className={styles.formHeader}>
+              <h1>Admin Office Login</h1>
+              <p>Staff access to the requisition portal</p>
             </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>
-                <Award size={24} />
-              </div>
-              <div className={styles.featureText}>
-                <h3>Issue Certificates</h3>
-                <p>Upload generated certificates directly to student accounts</p>
-              </div>
+
+            <form onSubmit={handleSubmit} className={`${styles.form} ${styles.formCard}`}>
+              {error && <div className={styles.errorAlert}>{error}</div>}
+
+              <Input
+                label="Admin ID"
+                placeholder="Enter your admin ID"
+                value={registerNo}
+                onChange={(e) => setRegisterNo(e.target.value.toUpperCase())}
+                leftIcon={<User size={18} />}
+                required
+                autoFocus
+              />
+
+              <Input
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                leftIcon={<Lock size={18} />}
+                rightIcon={
+                  <button
+                    type="button"
+                    className={styles.togglePassword}
+                    onClick={() => setShowPassword((v) => !v)}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                }
+                required
+              />
+
+              <Button
+                type="submit"
+                variant="primary"
+                fullWidth
+                size="lg"
+                isLoading={isLoading}
+                className={styles.signInButton}
+              >
+                Log In
+              </Button>
+            </form>
+
+            <div className={styles.formFooter}>
+              <p>Restricted to authorized admin office staff only.</p>
             </div>
           </div>
         </div>
 
-        <Card className={styles.loginCard} variant="elevated" padding="lg">
-          <div className={styles.cardHeader}>
-            <div className={styles.avatarIcon}>
-              <ShieldCheck size={32} />
+        {/* RIGHT — BRAND PANEL */}
+        <div className={styles.brandPanel}>
+          <div className={styles.brandContent}>
+            <img
+              src="/hindustan-logo-full.png"
+              alt="Hindustan Institute of Technology & Science"
+              className={styles.brandLogo}
+            />
+
+            <div className={styles.portalBadge}>
+              <ShieldCheck size={14} style={{ verticalAlign: '-2px', marginRight: 6 }} />
+              Admin Office Portal
             </div>
-            <h2>Admin Office Login</h2>
-            <p>Staff access to the requisition portal</p>
+
+            <p className={styles.brandSubtext}>
+              Review requests, issue certificates,
+              <br />
+              and track distribution analytics.
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit} className={styles.form}>
-            {error && <div className={styles.errorAlert}>{error}</div>}
-
-            <Input
-              label="Admin ID"
-              placeholder="Enter your admin ID"
-              value={registerNo}
-              onChange={(e) => setRegisterNo(e.target.value)}
-              leftIcon={<User size={20} />}
-              required
-              autoFocus
-            />
-
-            <Input
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              leftIcon={<Lock size={20} />}
-              rightIcon={
-                <button
-                  type="button"
-                  className={styles.togglePassword}
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              }
-              required
-            />
-
-            <Button type="submit" fullWidth size="lg" isLoading={isLoading}>
-              LOGIN
-            </Button>
-          </form>
-
-          <div className={styles.cardFooter}>
-            <p>Restricted to authorized admin office staff only.</p>
-          </div>
-        </Card>
+          <p className={styles.brandFooter}>
+            &copy; {new Date().getFullYear()} Hindustan Institute of Technology &amp; Science
+          </p>
+        </div>
       </div>
-
-      <footer className={styles.footer}>
-        <p>&copy; {new Date().getFullYear()} Hindustan Institute of Technology & Science. All rights reserved.</p>
-      </footer>
     </div>
   );
 }
