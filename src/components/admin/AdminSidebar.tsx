@@ -26,9 +26,7 @@ export function AdminSidebar({ isOpen, onToggle }: AdminSidebarProps) {
 
       <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
         <div className={styles.studentInfo}>
-          <div className={styles.studentAvatar}>
-            <img src="/hindustan-logo.png" alt="Hindustan Institute of Technology & Science" className={styles.studentLogo} />
-          </div>
+          <img src="/hindustan-logo-full.png" alt="Hindustan Institute of Technology & Science" className={styles.fullLogo} />
         </div>
 
         <nav className={styles.nav}>
