@@ -1,0 +1,26 @@
+.brandLockup {
+  padding: 4px 0;
+}
+
+.brandName {
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: 0.06em;
+  white-space: normal;
+}
+
+.brandSubtitle {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+.brandUniversity {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+  margin-top: 2px;
+}
