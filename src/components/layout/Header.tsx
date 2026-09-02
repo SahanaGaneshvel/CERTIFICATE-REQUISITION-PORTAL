@@ -11,23 +11,7 @@ export function Header({ onLogout }: HeaderProps) {
 
   return (
     <header className={styles.header}>
-      <div className={styles.brand}>
-        <img
-          src="/hindustan-logo.png"
-          alt="Hindustan Institute of Technology & Science"
-          className={styles.logo}
-        />
 
-        <div className={styles.brandText}>
-          <h1 className={styles.title}>HINDUSTAN</h1>
-          <p className={styles.subtitle}>
-            Institute of Technology & Science
-          </p>
-          <span className={styles.university}>
-            (Deemed to be University)
-          </span>
-        </div>
-      </div>
 
       <div className={styles.portalTitle}>
         <h2>
