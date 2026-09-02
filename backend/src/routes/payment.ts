@@ -29,7 +29,7 @@ paymentRouter.post('/initiate', requireAuth, asyncHandler(async (req, res) => {
   if (record.studentId !== req.auth!.userId) return res.status(403).json({ error: 'Forbidden' });
   if (record.paymentStatus === 'SUCCESS') return res.status(400).json({ error: 'Already paid' });
 
-  const srmTransId = `SRM-${Date.now()}-${uuid().slice(0, 8).toUpperCase()}`;
+  const srmTransId = `HITS-${Date.now()}-${uuid().slice(0, 8).toUpperCase()}`;
 
   const payment = await prisma.payment.create({
     data: {
